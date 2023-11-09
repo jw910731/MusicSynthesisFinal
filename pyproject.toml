@@ -5,7 +5,9 @@ description = "Add your description here"
 authors = [
     { name = "jw910731", email = "jw910731@gmail.com" }
 ]
-dependencies = []
+dependencies = [
+    "music21>=8.3.0",
+]
 readme = "README.md"
 requires-python = ">= 3.8"
 
