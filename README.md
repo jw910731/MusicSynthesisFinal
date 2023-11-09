@@ -9,3 +9,13 @@ To get started, run the following command:
 rye sync
 source .venv/bin/activate
 ```
+
+Add package as dependency by:
+```bash
+rye add <package>
+```
+
+Sync the dependency after installing new dependency:
+```bash
+rye sync
+```
