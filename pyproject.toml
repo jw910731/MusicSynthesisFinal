@@ -7,6 +7,9 @@ authors = [
 ]
 dependencies = [
     "music21>=8.3.0",
+    "torch>=2.1.0",
+    "transformers>=4.35.0",
+    "samplings>=0.1.7",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
