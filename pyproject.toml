@@ -8,6 +8,7 @@ dependencies = [
     "torch>=2.2.0.dev20231114",
     "transformers>=4.35.0",
     "samplings>=0.1.7",
+    "accelerate>=0.24.1",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"

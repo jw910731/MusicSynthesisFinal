@@ -13,8 +13,7 @@ class AiNoteFactory(NoteFactory):
         self.tokenizer = AutoTokenizer.from_pretrained(
             'sander-wood/text-to-music')
         self.model = AutoModelForSeq2SeqLM.from_pretrained(
-            'sander-wood/text-to-music')
-        self.model.to(self.device)
+            'sander-wood/text-to-music', device_map=device)
         self.model.eval()
 
         self.max_length = 1024
@@ -30,17 +29,18 @@ class AiNoteFactory(NoteFactory):
         self.eos_token_id = self.model.config.eos_token_id
 
     def get_notes(self):
-        decoder_input_ids = torch.tensor([[self.decoder_start_token_id]])
+        decoder_input_ids = torch.tensor([[self.decoder_start_token_id]], device=self.device)
 
         for t_idx in range(self.max_length):
             outputs = self.model(input_ids=self.input_ids,
-                                 decoder_input_ids=decoder_input_ids.to(self.device))
-            probs = outputs.logits[0][-1]
+                                 decoder_input_ids=decoder_input_ids)
+            # probs = outputs.logits[0][0][-1]
+            probs = outputs[0][0][-1]
             sampled_id = prob_helper(
                 probs, self.top_p, self.temperature)
 
             decoder_input_ids = torch.cat(
-                (decoder_input_ids, torch.tensor([[sampled_id]])), 1)
+                (decoder_input_ids, sampled_id.reshape((1, 1))), 1)
             if sampled_id != self.eos_token_id:
                 continue
             else:
