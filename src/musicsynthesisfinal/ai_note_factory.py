@@ -15,6 +15,7 @@ class AiNoteFactory(NoteFactory):
         self.model = AutoModelForSeq2SeqLM.from_pretrained(
             'sander-wood/text-to-music')
         self.model.to(self.device)
+        self.model.eval()
 
         self.max_length = 1024
         self.top_p = 0.9
