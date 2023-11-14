@@ -70,7 +70,7 @@ def random_sampling(probs):
     dist = probs.clone()
     dist_cum = torch.cumsum(dist, 0)
     return torch.searchsorted(
-        dist_cum, torch.rand(size=(1, )))[0]
+        dist_cum, torch.rand(size=(1, ), device=dist_cum.device))[0]
 
 
 def top_p_sampling(probs,
@@ -128,9 +128,9 @@ def top_p_sampling(probs,
     if 0 < top_p and top_p < 1:
         # Sort probability distribution
         sorted_tokens = torch.argsort(probs, descending=True)
-        sorted_probs = torch.log(torch.sort(probs, descending=True)[0])
-        cumulative_probs = torch.logcumsumexp(sorted_probs, 0)
-        sorted_tokens_to_remove = cumulative_probs > math.log(top_p)
+        sorted_probs = torch.sort(probs, descending=True)[0]
+        cumulative_probs = torch.cumsum(sorted_probs, 0)
+        sorted_tokens_to_remove = cumulative_probs > top_p
 
         # Logical right shift
         sorted_tokens_to_remove = torch.roll(sorted_tokens_to_remove, 1)
