@@ -2,12 +2,10 @@
 name = "musicsynthesisfinal"
 version = "0.1.0"
 description = "Add your description here"
-authors = [
-    { name = "jw910731", email = "jw910731@gmail.com" }
-]
+authors = [{ name = "jw910731", email = "jw910731@gmail.com" }]
 dependencies = [
     "music21>=8.3.0",
-    "torch>=2.1.0",
+    "torch>=2.2.0.dev20231114",
     "transformers>=4.35.0",
     "samplings>=0.1.7",
 ]
@@ -21,6 +19,11 @@ build-backend = "hatchling.build"
 [tool.rye]
 managed = true
 dev-dependencies = []
+
+[[tool.rye.sources]]
+name = "pytorch-preview"
+url = "https://download.pytorch.org/whl/nightly/cpu"
+type = "index"
 
 [tool.hatch.metadata]
 allow-direct-references = true
