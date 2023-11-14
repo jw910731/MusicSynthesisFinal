@@ -4,7 +4,7 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 
 def main():
-    device = torch.device('mps')
+    device = torch.device('cpu')
     tokenizer = AutoTokenizer.from_pretrained('sander-wood/text-to-music')
     model = AutoModelForSeq2SeqLM.from_pretrained('sander-wood/text-to-music')
     model.to(device)
