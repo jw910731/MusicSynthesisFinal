@@ -9,7 +9,7 @@ class NoteFactory(ABC):
     """
 
     @abstractmethod
-    def get_note(self) -> music21.note.Note:
+    def get_notes(self) -> music21.stream.base.Score | music21.stream.base.Part | music21.stream.base.Opus:
         return NotImplemented
 
     def __iter__(self):
@@ -32,7 +32,10 @@ class RandomNoteFactory(NoteFactory):
         self._lower_bound = lower_bound
         self._upper_bound = upper_bound
 
-    def get_note(self) -> music21.note.Note:
-        noteStr = random.choice(
-            self.SCALE) + str(random.randint(self._lower_bound, self._upper_bound))
-        return music21.note.Note(noteStr)
+    def get_notes(self) -> music21.note.Note:
+        ret = music21.stream.base.Part()
+        for _ in range(8):
+            noteStr = random.choice(
+                self.SCALE) + str(random.randint(self._lower_bound, self._upper_bound))
+            ret.append(music21.note.Note(noteStr))
+        return ret
