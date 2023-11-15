@@ -1,2 +1,13 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script>
+
+</script>
+
+<div class="container mx-auto">
+	<label class="label">
+		<p>Search</p>
+		<div class="input-group input-group-divider grid-cols-[1fr_auto]">
+			<input type="search" placeholder="What music style do you like..." />
+			<button class="variant-filled-secondary">Generate</button>
+		</div>
+	</label>
+</div>
