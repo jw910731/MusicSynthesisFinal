@@ -9,6 +9,7 @@ dependencies = [
     "transformers>=4.35.0",
     "samplings>=0.1.7",
     "accelerate>=0.24.1",
+    "flask>=3.0.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
