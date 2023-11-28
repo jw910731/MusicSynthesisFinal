@@ -1,13 +1,13 @@
-from flask import Flask, send_from_directory
+from flask import send_from_directory, Blueprint
 
-app = Flask(__name__)
+bp = Blueprint('auth', __name__, url_prefix='/')
 
 
-@app.route("/")
+@bp.route("/")
 def index():
     return send_from_directory('../../web/build', "index.html")
 
 
-@app.route("/<path:path>")
+@bp.route("/<path:path>")
 def base(path):
     return send_from_directory('../../web/build', path)
