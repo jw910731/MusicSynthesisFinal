@@ -16,7 +16,7 @@ class NoteFactory(ABC):
         return self
 
     def __next__(self):
-        return self.getNote()
+        return self.get_notes()
 
 
 class RandomNoteFactory(NoteFactory):
