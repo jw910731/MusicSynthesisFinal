@@ -1,12 +1,12 @@
 import beat, chord, melody
 import music21
 import random
-
+import data
 
 class ClassicalBeat(beat.Beat):
-    PROBABILITY = {'Allegro': [2, 12, 45, 30, 9, 2],
-                   'Moderato': [2, 14, 34, 34, 14, 2],
-                   'Andante': [2, 10, 45, 32, 9, 2]}
+    PROBABILITY = {'Allegro': [0.02, 0.12, 0.45, 0.30, 0.09, 0.02],
+                   'Moderato': [0.02, 0.14, 0.34, 0.34, 0.14, 0.02],
+                   'Andante': [0.02, 0.10, 0.45, 0.32, 0.09, 0.02]}
     BPMRANGE = {'Allegro': (120, 168),
                 'Moderato': (90, 115),
                 'Andante': (66, 76)}
@@ -21,11 +21,8 @@ class ClassicalBeat(beat.Beat):
             speed_type (str): The type of speed for the beat.
             prefix (list of int): The prefix values for the beat probabilities.
             bpm (int): The beats per minute for the beat.
-
         """
-        self.speed_type, self.prefix = random.choice(list(self.PROBABILITY.items()))
-        for i in range(1, len(self.prefix)):
-            self.prefix[i] += self.prefix[i - 1]
+        self.speed_type, self.durationProbability = random.choice(list(self.PROBABILITY.items()))
         self.bpm = random.randint(*self.BPMRANGE[self.speed_type])
 
     def __get_random_beat(self):
@@ -35,13 +32,9 @@ class ClassicalBeat(beat.Beat):
         Returns:
             float: The duration of the beat in quarter note units.
         """
-        r = random.randint(1, 100)
-        a = 3
-        for p in self.prefix:
-            if r <= p:
-                return 2 ** (-a)
-            a -= 1
-        return 2 ** (-1)
+        
+        r = data.weightRandomValuable(self.durationProbability)
+        return 2 ** (r-3)
 
     def generate_beat(self, n) -> list[music21.duration.Duration]:
         """
@@ -77,12 +70,40 @@ class ClassicalBeat(beat.Beat):
 
 
 class ClassicalChord(chord.Chord):
+    def __init__(self, tone):
+        self.__Auto__ = {'I'  :{'IV': 0.5, 'vi': 0.5}, 
+                         'ii' :{'IV': 0.5, 'V': 0.5},
+                         'iii':{'ii': 0.5, 'IV': 0.5},
+                         'IV' :{'ii': 0.25, 'iii': 0.25, 'V': 0.25, 'vi': 0.2, 'I': 0.05},
+                         'V'  :{'iii':0.3, 'vi': 0.5,'I':0.2},
+                         'vi' :{'iii':0.3, 'IV': 0.3,'V':0.4}
+                        }
+        self.nowChord = 'I'
+        self.lastChord = 'ST'
+        self.tone = tone
     def generate_chord(self) -> music21.chord.Chord:
-        pass
+        return music21.roman.RomanNumeral(self.generate_roman(), self.tone)
+    def __nextChord(self, nowLoc) -> None:
+        val, pro = list(self.__Auto__[nowLoc].keys()),\
+                   list(self.__Auto__[nowLoc].values())
+        choose = data.weightRandomValuable(pro)
+        while (val[choose] == self.lastChord) :
+            choose = data.weightRandomValuable(pro)
+        self.lastChord, self.nowChord = self.nowChord, val[choose]
+        
+    def generate_roman(self) -> str:
+        ret = self.nowChord
+        self.__nextChord(self.nowChord)
+        return ret
 
 
 class ClassicalMelody(melody.Melody):
+    def __init__(self) -> None:
+        # super().__init__()
+        pass
     def generate_melody(self) -> music21.stream.Measure:
+        # how to pass the chord and beat?
+        
         pass
 
 

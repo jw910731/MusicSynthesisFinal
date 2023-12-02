@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import music21
 
 
-class Beat(ABC):
+class Beat(ABC): 
     """
     Beat is an abstract base class that defines the interface for generating drum beats and note durations.
     """
