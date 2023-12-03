@@ -36,7 +36,7 @@ class ClassicalBeat(beat.Beat):
         r = data.weight_random_valuable(self.durationProbability)
         return 2 ** (r - 3)
 
-    def generate_beat(self, n) -> list[music21.duration.Duration]:
+    def generate_beat(self, n:int) -> list[music21.duration.Duration]:
         """
         Generates a list of `Duration` objects representing a classical beat pattern.
 
@@ -89,15 +89,25 @@ class ClassicalChord(chord.Chord):
 
         for p in pitch:
             minp = min(minp, p.octave)
-        #     print(p.octave, end = ' ')
-        # print(minp)
-        # print('after')
         for p in pitch:
             p.octave -= min(minp - 1, 3)
-        #     print(p.octave, end = ' ')
-        # print()
         return music21.chord.Chord(pitch, duration=music21.duration.Duration(dur))
-
+    def generate_chord_list(self, beat:list[music21.duration.Duration]) -> list[music21.chord.Chord]:
+        dur = 0.0
+        offset = 0.0
+        ret = []
+        for bt in [x.quarterLength for x in beat]:
+            if dur.is_integer() and dur != 0:
+                if(dur > 4):
+                    ret.append(self.generate_chord(4))
+                    ret.append(self.generate_chord(dur-4))
+                else:
+                    ret.append(self.generate_chord(dur))
+                dur = 0
+            offset += bt
+            dur+=bt
+        ret.append(self.generate_chord(dur))
+        return ret
     def __next_chord(self, now_location) -> None:
         val, pro = list(self.__Auto__[now_location].keys()), \
             list(self.__Auto__[now_location].values())
@@ -112,19 +122,42 @@ class ClassicalChord(chord.Chord):
         return ret
 
 
-class ClassicalMelody(melody.Melody):
-    def __init__(self) -> None:
-        super().__init__()
+class ClassicalMelody(melody.CommonMelody):
+    def __init__(self, beat:list[music21.duration.Duration], chord:list[music21.chord.Chord], tone) -> None:
+        super().__init__(beat, chord, tone)
         pass
 
-    def generate_melody(self) -> music21.stream.Measure:
-        # how to pass the chord and beat?
+    # def generate_melody(self) -> music21.stream.Measure:
+    #     # how to pass the chord and beat?
 
-        pass
+    #     pass
 
 
 class Classical:
-    def __init__(self):
-        self.melody = ClassicalMelody
-        self.chord = ClassicalChord
-        self.beat = ClassicalBeat
+    def __init__(self, tone):
+        self.chord = ClassicalChord(tone)
+        self.beat = ClassicalBeat()
+        self.tone = tone
+    def genarate_music(self):
+        part_chord = music21.stream.Part()
+        part_chord.insert(0,music21.tempo.MetronomeMark(number=self.beat.get_bpm()))
+        part_chord.insert(0,music21.key.Key(self.tone))
+        part_melody = music21.stream.Part()
+        part_melody.insert(0,music21.tempo.MetronomeMark(number=self.beat.get_bpm()))
+        part_melody.insert(0,music21.key.Key(self.tone))
+        for i in range(16):
+            bt = self.beat.generate_beat(8)
+            ch = self.chord.generate_chord_list(bt)
+            mel = ClassicalMelody(bt,ch, self.chord.tone)
+            ret = []
+            for c in ch:
+                part_chord.append(c)
+            m = mel.generate_melody()
+            for x in m:
+                part_melody.append(x)
+        # ret.append()
+        ret.append(part_melody)
+        ret.append(part_chord)
+        # print(ret[0])
+        # print(ret[1])
+        return ret
