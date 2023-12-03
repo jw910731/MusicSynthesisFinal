@@ -82,21 +82,21 @@ class ClassicalChord(chord.Chord):
         self.lastChord = 'ST'
         self.tone = tone
 
-    def generate_chord(self, dur = 1) -> music21.chord.Chord:
+    def generate_chord(self, dur=1) -> music21.chord.Chord:
         roman = music21.roman.RomanNumeral(self.generate_roman(), self.tone)
         pitch = roman.pitches
         minp = 10
-        
+
         for p in pitch:
             minp = min(minp, p.octave)
         #     print(p.octave, end = ' ')
         # print(minp)
         # print('after')
         for p in pitch:
-            p.octave-=min(minp-1, 3)
+            p.octave -= min(minp - 1, 3)
         #     print(p.octave, end = ' ')
         # print()
-        return music21.chord.Chord(pitch, duration = music21.duration.Duration(dur))
+        return music21.chord.Chord(pitch, duration=music21.duration.Duration(dur))
 
     def __next_chord(self, now_location) -> None:
         val, pro = list(self.__Auto__[now_location].keys()), \
@@ -110,21 +110,7 @@ class ClassicalChord(chord.Chord):
         ret = self.nowChord
         self.__next_chord(self.nowChord)
         return ret
-    def generate_chord_duration(self, beat):
-        offset = 0
-        dur = 0
-        ret = music21.stream.Measure()
-        for d in beat:
-            if(offset == int(offset) and offset > 0):
-                ch = self.generate_chord(dur)
-                ret.append(ch)
-                dur = 0
-            offset += d.quarterLength
-            dur += d.quarterLength
-        ch = self.generate_chord()
-        ch.quarterLength = dur
-        ret.append(ch)
-        return ret
+
 
 class ClassicalMelody(melody.Melody):
     def __init__(self) -> None:
