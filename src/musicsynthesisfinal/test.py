@@ -16,7 +16,7 @@ for i in range(4):
     sum_beat = 0
     for bt in beat:
         sum_beat += bt.quarterLength
-        p1.append(music21.note.Note(data.STANDARD_TONE_NOTES['C major'][0], duration=bt))
+        p1.append(music21.note.Note(data.NATURAL_SCALE[tone][0], duration=bt))
 
     ch = music21.stream.Measure()
     for _ in range(math.ceil(sum_beat/4)):
