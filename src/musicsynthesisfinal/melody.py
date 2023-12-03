@@ -48,9 +48,6 @@ class CommonMelody(Melody):
         cnt = 0
         for i in range(sz):
             pro[i] = prolist[i] ** (2 if last_note.duration.quarterLength + dur <= 0.75 else 1) * chordfactor[i]
-            cnt += pro[i]
-        for i in range(sz):
-            pro[i] /= cnt
         # print(pro)
         return music21.note.Note(midi = data.weight_random_valuable(pro)+F3, quarterLength = dur)
     def generate_melody(self) -> list[music21.note.Note]:

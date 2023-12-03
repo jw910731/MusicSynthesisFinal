@@ -29,10 +29,10 @@ def weight_random_valuable(probability):
     prefix = []
     # print(probability)
     for i in probability:
-        prefix.append(i * 100)
+        prefix.append(i)
         if len(prefix) > 1:
             prefix[-1] += prefix[-2]
-    r = random.randint(1, 100)
+    r = random.randint(1, prefix[-1])
     for p in range(len(prefix)):
         if r <= prefix[p]:
             return p

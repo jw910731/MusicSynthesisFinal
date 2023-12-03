@@ -9,9 +9,9 @@ import melody
 
 
 class ClassicalBeat(beat.Beat):
-    PROBABILITY = {'Allegro': [0.02, 0.12, 0.45, 0.30, 0.09, 0.02],
-                   'Moderato': [0.02, 0.14, 0.34, 0.34, 0.14, 0.02],
-                   'Andante': [0.02, 0.10, 0.45, 0.32, 0.09, 0.02]}
+    PROBABILITY = {'Allegro': [2, 12, 45, 30, 9, 2],
+                   'Moderato': [2, 14, 34, 34, 14, 2],
+                   'Andante': [2, 10, 45, 32, 9, 2]}
     BPMRANGE = {'Allegro': (120, 168),
                 'Moderato': (90, 115),
                 'Andante': (66, 76)}
@@ -71,12 +71,12 @@ class ClassicalBeat(beat.Beat):
 
 class ClassicalChord(chord.Chord):
     def __init__(self, tone):
-        self.__Auto__ = {'I': {'IV': 0.5, 'vi': 0.5},
-                         'ii': {'IV': 0.5, 'V': 0.5},
-                         'iii': {'ii': 0.5, 'IV': 0.5},
-                         'IV': {'ii': 0.25, 'iii': 0.25, 'V': 0.25, 'vi': 0.2, 'I': 0.05},
-                         'V': {'iii': 0.3, 'vi': 0.5, 'I': 0.2},
-                         'vi': {'iii': 0.3, 'IV': 0.3, 'V': 0.4}
+        self.__Auto__ = {'I': {'IV': 50, 'vi': 50},
+                         'ii': {'IV': 50, 'V': 50},
+                         'iii': {'ii': 50, 'IV': 50},
+                         'IV': {'ii': 25, 'iii': 25, 'V': 25, 'vi': 20, 'I': 5},
+                         'V': {'iii': 30, 'vi': 50, 'I': 20},
+                         'vi': {'iii': 30, 'IV': 30, 'V': 40}
                          }
         self.nowChord = 'I'
         self.lastChord = 'ST'
