@@ -71,27 +71,28 @@ class ClassicalBeat(beat.Beat):
 
 class ClassicalChord(chord.Chord):
     def __init__(self, tone):
-        self.__Auto__ = {'I': {'IV': 50, 'vi': 50},
-                         'ii': {'IV': 50, 'V': 50},
-                         'iii': {'ii': 50, 'IV': 50},
-                         'IV': {'ii': 25, 'iii': 25, 'V': 25, 'vi': 20, 'I': 5},
-                         'V': {'iii': 30, 'vi': 50, 'I': 20},
-                         'vi': {'iii': 30, 'IV': 30, 'V': 40}
+        self.__Auto__ = {1: {4: 50, 6: 50},
+                         2: {4: 50, 5: 50},
+                         3: {2: 50, 4: 50},
+                         4: {2: 25, 3: 25, 5: 25, 6: 20, 1: 5},
+                         5: {3: 30, 6: 50, 1: 20},
+                         6: {3: 30, 4: 30, 5: 40}
                          }
-        self.nowChord = 'I'
+        self.__MAJOR_MINOR_CONVERT = [
+            ["I", "ii", "iii", "IV", "V", "vi", "viio"],
+            # FIXME: Minor tone is quite buggy
+            ["I", "iio", "III", "iv", "v", "VI", "VII"]
+        ]
+        self.nowChord = 1
         self.lastChord = 'ST'
         self.tone = tone
 
     def generate_chord(self, dur=1) -> music21.chord.Chord:
-        roman = music21.roman.RomanNumeral(self.generate_roman(), self.tone)
-        pitch = roman.pitches
-        minp = 10
-
-        for p in pitch:
-            minp = min(minp, p.octave)
-        for p in pitch:
-            p.octave -= min(minp - 1, 3)
-        return music21.chord.Chord(pitch, duration=music21.duration.Duration(dur))
+        roman = self.generate_roman()
+        roman = music21.roman.RomanNumeral(self.__MAJOR_MINOR_CONVERT[str.islower(self.tone)][roman], self.tone)
+        roman.semiClosedPosition(forceOctave=3, inPlace=True)
+        roman.duration = music21.duration.Duration(dur)
+        return roman
 
     def generate_chord_list(self, beat: list[music21.duration.Duration]) -> list[music21.chord.Chord]:
         dur = 0.0
@@ -99,7 +100,7 @@ class ClassicalChord(chord.Chord):
         ret = []
         for bt in [x.quarterLength for x in beat]:
             if dur.is_integer() and dur != 0:
-                if (dur > 4):
+                if dur > 4:
                     ret.append(self.generate_chord(4))
                     ret.append(self.generate_chord(dur - 4))
                 else:
@@ -118,7 +119,7 @@ class ClassicalChord(chord.Chord):
             choose = data.weight_random_valuable(pro)
         self.lastChord, self.nowChord = self.nowChord, val[choose]
 
-    def generate_roman(self) -> str:
+    def generate_roman(self) -> int:
         ret = self.nowChord
         self.__next_chord(self.nowChord)
         return ret
@@ -152,7 +153,7 @@ class Classical:
         for i in range(16):
             bt = self.beat.generate_beat(8)
             ch = self.chord.generate_chord_list(bt)
-            mel = ClassicalMelody(bt, ch, self.chord.tone)
+            mel = ClassicalMelody(bt, ch, self.tone)
             for c in ch:
                 part_chord.append(c)
             m = mel.generate_melody()

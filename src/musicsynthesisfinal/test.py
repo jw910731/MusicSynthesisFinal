@@ -5,7 +5,7 @@ import classical
 import music21
 import data
 
-tone = 'b'
+tone = 'C'
 c = classical.Classical(tone)
 mus = c.generate_music()
 s = music21.stream.Stream()
