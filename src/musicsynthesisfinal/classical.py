@@ -9,9 +9,9 @@ import melody
 
 
 class ClassicalBeat(beat.Beat):
-    PROBABILITY = {'Allegro': [2, 12, 45, 30, 9, 2],
-                   'Moderato': [2, 14, 34, 34, 14, 2],
-                   'Andante': [2, 10, 45, 32, 9, 2]}
+    PROBABILITY = {'Allegro': [1, 12, 46, 30, 9, 2],
+                   'Moderato': [1, 7, 42, 34, 14, 2],
+                   'Andante': [1, 5, 45, 38, 9, 2]}
     BPMRANGE = {'Allegro': (120, 168),
                 'Moderato': (90, 115),
                 'Andante': (66, 76)}
@@ -151,7 +151,7 @@ class Classical:
         part_melody.insert(0, music21.key.Key(self.tone))
         ret = []
         for i in range(16):
-            bt = self.beat.generate_beat(8)
+            bt = self.beat.generate_beat(6)
             ch = self.chord.generate_chord_list(bt)
             mel = ClassicalMelody(bt, ch, self.tone)
             for c in ch:

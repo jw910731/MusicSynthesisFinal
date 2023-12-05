@@ -18,6 +18,9 @@ class PopBeat(beat.Beat):
         pass
 
 class PopChord(chord.Chord):
+    def __init__(self) -> None:
+        super().__init__()
+        chordProcessor = ['C', 'G/B', 'Am', 'Em/G', 'F', 'C/E', 'Dm', 'G']
     def generate_chord(self) -> music21.chord.Chord:
         pass
 
