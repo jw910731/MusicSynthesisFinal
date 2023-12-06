@@ -148,7 +148,8 @@ class PopMelody(melody.CommonMelody):
 
 class Pop:
     def __init__(self, tone):
-        self.chord = PopChord(tone)
+        self.verse_chord = PopChord(tone)
+        self.chorus_chord = PopChord(tone)
         self.beat = PopBeat()
         self.tone = tone
 
@@ -160,19 +161,65 @@ class Pop:
         part_melody.insert(0, music21.tempo.MetronomeMark(number=self.beat.get_bpm()))
         part_melody.insert(0, music21.key.Key(self.tone))
         ret = []
-        for i in range(16):
+        
+        verse_beat = []
+        verse_chordpro = []
+        verse_melody = []
+        for i in range(2):
             bt = self.beat.generate_beat(32)
-            ch = self.chord.generate_chord_list(bt)
+            ch = self.verse_chord.generate_chord_list(bt)
             mel = PopMelody(bt, ch, self.tone)
-            # for c in ch:
-            #     print(c.quarterLength, end = ' ')
-            # print()
+            for b in bt:
+                verse_beat.append(b)
             for c in ch:
-                # print(c.quarterLength)
-                part_chord.append(c)
+                verse_chordpro.append(c)
             m = mel.generate_melody()
             for x in m:
-                part_melody.append(x)
+                verse_melody.append(x)
+                
+        chorus_beat = self.beat.generate_beat(16)
+        chorus_chordpro = self.chorus_chord.generate_chord_list(chorus_beat)
+        chorus_melody = PopMelody(chorus_beat, chorus_chordpro, self.tone).generate_melody()
+        intro_beat=copy.deepcopy(chorus_beat)
+        cnt = 0
+        while cnt < 8:
+            cnt += intro_beat[0].quarterLength
+            intro_beat.pop(0)
+            
+        intro_chordpro=copy.deepcopy(chorus_chordpro)
+        cnt = 0
+        while cnt < 8:
+            cnt += intro_chordpro[0].quarterLength
+            intro_chordpro.pop(0)
+        
+        intro_melody=copy.deepcopy(chorus_melody)
+        cnt = 0
+        while cnt < 8:
+            cnt += intro_melody[0].quarterLength
+            intro_melody.pop(0)
+        for c in intro_chordpro:
+            part_chord.append(copy.deepcopy(c))
+        for x in intro_melody:
+            part_melody.append(copy.deepcopy(x))
+        for _ in range(2):
+            for c in verse_chordpro:
+                part_chord.append(copy.deepcopy(c))
+            for x in verse_melody:
+                part_melody.append(copy.deepcopy(x))
+            for i in range(4):
+                for c in chorus_chordpro:
+                    part_chord.append(copy.deepcopy(c))
+                for x in chorus_melody:
+                    part_melody.append(copy.deepcopy(x))
+        # for i in range(2):
+        #     bt = self.beat.generate_beat(32)
+        #     ch = self.chord.generate_chord_list(bt)
+        #     mel = PopMelody(bt, ch, self.tone)
+        #     for c in ch:
+        #         part_chord.append(c)
+        #     m = mel.generate_melody()
+        #     for x in m:
+        #         part_melody.append(x)
         ret.append(part_melody)
         ret.append(part_chord)
         return ret
