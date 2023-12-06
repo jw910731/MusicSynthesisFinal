@@ -12,7 +12,7 @@ import data
 
 class PopBeat(beat.Beat):
     def __init__(self):
-        self.bpm = random.randint(90, 120)
+        self.bpm = random.randint(90, 150)
         pass
 
     def __beat_recursive(self, size: float, part: float) -> list[int]:
