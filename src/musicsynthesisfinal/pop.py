@@ -28,7 +28,7 @@ class PopBeat(beat.Beat):
     def generate_beat(self, n) -> list[music21.duration.Duration]:
         ret = []
         for i in range(0, n, 8):
-            ls = self.__beat_recursive(8, 0)
+            ls = self.__beat_recursive(min(n-i,8), 0)
             for x in ls:
                 ret.append(music21.duration.Duration(x))
         return ret
@@ -133,8 +133,8 @@ class PopMelody(melody.CommonMelody):
         offset = 0
         now_chord = 0
         chord_duration = self._chord[0].quarterLength
-
         for bt in self._beat:
+            # print (chord_duration, now_chord, offset, bt)
             n = self.get_note(last_note, bt.quarterLength, self._chord[now_chord].pitches)
             part_melody.append(n)
             last_note = n
@@ -178,25 +178,57 @@ class Pop:
                 verse_melody.append(x)
                 
         chorus_beat = self.beat.generate_beat(16)
+        
         chorus_chordpro = self.chorus_chord.generate_chord_list(chorus_beat)
         chorus_melody = PopMelody(chorus_beat, chorus_chordpro, self.tone).generate_melody()
+        change_beat = self.beat.generate_beat(4)
+        change_chordpro = [chorus_chordpro[-1]]
+        change_chordpro[0].quarterLength = 4
+        change_melody = PopMelody(change_beat, change_chordpro, self.tone).generate_melody()
+        
         intro_beat=copy.deepcopy(chorus_beat)
         cnt = 0
         while cnt < 8:
             cnt += intro_beat[0].quarterLength
             intro_beat.pop(0)
+        for i in intro_beat:
+            i.quarterLength *=1.5
+        intro_beat[-1].quarterLength+=4
             
         intro_chordpro=copy.deepcopy(chorus_chordpro)
         cnt = 0
         while cnt < 8:
             cnt += intro_chordpro[0].quarterLength
             intro_chordpro.pop(0)
-        
+        # print([x.quarterLength for x in intro_chordpro])
+        for i in intro_chordpro:
+            i.quarterLength *=1.5
+        intro_chordpro[-1].quarterLength+=4
         intro_melody=copy.deepcopy(chorus_melody)
         cnt = 0
         while cnt < 8:
             cnt += intro_melody[0].quarterLength
             intro_melody.pop(0)
+        for i in intro_melody:
+            i.quarterLength *=1.5
+        intro_melody[-1].quarterLength += 4
+        
+        chorus_beat+=copy.deepcopy(chorus_beat)
+        chorus_chordpro+=copy.deepcopy(chorus_chordpro)
+        chorus_melody+=copy.deepcopy(chorus_melody)
+        cnt = 0
+        while cnt < 4:
+            cnt += chorus_beat[-1].quarterLength
+            chorus_beat.pop()
+        for x in change_beat:
+            chorus_beat.append(x)
+        cnt = 0
+        while cnt < 4:
+            cnt += chorus_melody[-1].quarterLength
+            chorus_melody.pop()
+        for x in change_melody:
+            chorus_melody.append(x)
+        
         for c in intro_chordpro:
             part_chord.append(copy.deepcopy(c))
         for x in intro_melody:
@@ -206,7 +238,7 @@ class Pop:
                 part_chord.append(copy.deepcopy(c))
             for x in verse_melody:
                 part_melody.append(copy.deepcopy(x))
-            for i in range(4):
+            for i in range(2):
                 for c in chorus_chordpro:
                     part_chord.append(copy.deepcopy(c))
                 for x in chorus_melody:
