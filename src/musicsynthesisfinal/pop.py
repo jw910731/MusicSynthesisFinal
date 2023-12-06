@@ -12,21 +12,22 @@ import data
 
 class PopBeat(beat.Beat):
     def __init__(self):
-        self.bpm = random.randint(90,120)
+        self.bpm = random.randint(90, 120)
         pass
-    def __beat_recursive(self, size:float, part:float)->list[int]:
+
+    def __beat_recursive(self, size: float, part: float) -> list[int]:
         if size <= 0.25:
             return [size]
         if part == 6 and size == 2:
-            if random.randint(1,100) <= 10:
+            if random.randint(1, 100) <= 10:
                 return [size]
-        if size <= 1 and random.random() <= (1/(4*size))**0.5:
+        if size <= 1 and random.random() <= (1 / (4 * size)) ** 0.5:
             return [size]
-        return self.__beat_recursive(size/2, part) + self.__beat_recursive(size/2, part+size/2)
+        return self.__beat_recursive(size / 2, part) + self.__beat_recursive(size / 2, part + size / 2)
 
     def generate_beat(self, n) -> list[music21.duration.Duration]:
         ret = []
-        for i in range(0,n,8):
+        for i in range(0, n, 8):
             ls = self.__beat_recursive(8, 0)
             for x in ls:
                 ret.append(music21.duration.Duration(x))
@@ -65,20 +66,21 @@ class PopChord(chord.Chord):
         chrd.semiClosedPosition(forceOctave=3, inPlace=True)
         self.pivot = (self.pivot + 1) % len(self.progressions)
         return chrd
+
     def generate_chord_list(self, beat: list[music21.duration.Duration]) -> list[music21.chord.Chord]:
         ret = []
         cnt = 0
         for bt in beat:
             cnt += bt.quarterLength
-        for i in range(int(cnt)//8):
+        for i in range(int(cnt) // 8):
             thisChord = self.generate_chord()
-            length = 8 if random.randint(1,100)<=27 else 4
+            length = 8 if random.randint(1, 100) <= 27 else 4
             thisChord.quarterLength = length
             ret.append(thisChord)
             if length == 4:
                 ret.append(copy.deepcopy(thisChord))
         return ret
-            
+
 
 class PopMelody(melody.CommonMelody):
     def __init__(self, beat: list[music21.duration.Duration], chord: list[music21.chord.Chord], tone):
@@ -121,6 +123,7 @@ class PopMelody(melody.CommonMelody):
             prob[i] = prob_list[i] ** (2 if prev_note.duration.quarterLength + dur <= 0.75 else 1) * chord_factor[i]
         ret_note = scale[data.weight_random_valuable(prob)]
         return music21.note.Note(ret_note, quarterLength=dur)
+
     def generate_melody(self) -> list[music21.note.Note]:
         part_melody = []
         pitch = -1
@@ -129,9 +132,9 @@ class PopMelody(melody.CommonMelody):
         last_note = music21.note.Note(midi=pitch, quarterLength=4)
         offset = 0
         now_chord = 0
-        chord_duration = super()._chord[0].quarterLength
+        chord_duration = self._chord[0].quarterLength
 
-        for bt in self.__beat:
+        for bt in self._beat:
             n = self.get_note(last_note, bt.quarterLength, self._chord[now_chord].pitches)
             part_melody.append(n)
             last_note = n
@@ -141,6 +144,8 @@ class PopMelody(melody.CommonMelody):
                 if now_chord < len(self._chord):
                     chord_duration += self._chord[now_chord].quarterLength
         return part_melody
+
+
 class Pop:
     def __init__(self, tone):
         self.chord = PopChord(tone)
