@@ -94,23 +94,6 @@ class ClassicalChord(chord.Chord):
         roman.duration = music21.duration.Duration(dur)
         return roman
 
-    def generate_chord_list(self, beat: list[music21.duration.Duration]) -> list[music21.chord.Chord]:
-        dur = 0.0
-        offset = 0.0
-        ret = []
-        for bt in [x.quarterLength for x in beat]:
-            if dur.is_integer() and dur != 0:
-                if dur > 4:
-                    ret.append(self.generate_chord(4))
-                    ret.append(self.generate_chord(dur - 4))
-                else:
-                    ret.append(self.generate_chord(dur))
-                dur = 0
-            offset += bt
-            dur += bt
-        ret.append(self.generate_chord(dur))
-        return ret
-
     def __next_chord(self, now_location) -> None:
         val, pro = list(self.__Auto__[now_location].keys()), \
             list(self.__Auto__[now_location].values())

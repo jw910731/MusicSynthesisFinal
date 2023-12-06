@@ -1,4 +1,5 @@
 import random
+import typing
 
 NOTE_NUMBER_CONV = {
     'C': 12, 'C#': 13, 'D': 14, 'D#': 15, 'E': 16, 'F': 17, 'F#': 18, 'G': 19, 'G#': 20, 'A': 21, 'B-': 22, 'B': 23,
@@ -37,3 +38,10 @@ def weight_random_valuable(probability):
         if r <= prefix[p]:
             return p
     raise ValueError('probability error')
+
+
+def index(iter: typing.Iterable, target, function) -> int:
+    for i, x in enumerate(iter):
+        if function(target, x):
+            return i
+    return -1

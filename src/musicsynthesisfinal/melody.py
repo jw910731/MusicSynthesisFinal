@@ -6,13 +6,6 @@ import data
 import random
 
 
-def index(iter: typing.Iterable, target, function) -> int:
-    for i, x in enumerate(iter):
-        if function(target, x):
-            return i
-    return -1
-
-
 class Melody(ABC):
     @abstractmethod
     def generate_melody(self) -> music21.stream.Measure | music21.stream.Part:
@@ -39,7 +32,7 @@ class CommonMelody(Melody):
         prob_list = [1] * sz
         chord_factor = [1] * sz
         # Construct magic probability factor
-        ind_last = index(scale, prev_note.pitch, lambda x, y: x.isEnharmonic(y))
+        ind_last = data.index(scale, prev_note.pitch, lambda x, y: x.isEnharmonic(y))
         if ind_last != -1:
             for i in range(len(scale)):
                 dis = abs(ind_last - i)
