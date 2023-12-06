@@ -17,7 +17,7 @@ class CommonMelody(Melody):
         # chord had duration
         self.__general_middle = [4, 4, 3, 2, 1]
         self.__beat = beat
-        self.__chord = chord
+        self._chord = chord
         self.tone = tone
         # [F3~F5]
 
@@ -66,14 +66,15 @@ class CommonMelody(Melody):
         last_note = music21.note.Note(midi=pitch, quarterLength=4)
         offset = 0
         now_chord = 0
-        chord_duration = self.__chord[0].quarterLength
+        chord_duration = self._chord[0].quarterLength
+
         for bt in self.__beat:
-            n = self.get_note(last_note, bt.quarterLength, self.__chord[now_chord].pitches)
+            n = self.get_note(last_note, bt.quarterLength, self._chord[now_chord].pitches)
             part_melody.append(n)
             last_note = n
             offset += bt.quarterLength
             if offset >= chord_duration:
                 now_chord += 1
-                if now_chord < len(self.__chord):
-                    chord_duration += self.__chord[now_chord].quarterLength
+                if now_chord < len(self._chord):
+                    chord_duration += self._chord[now_chord].quarterLength
         return part_melody
