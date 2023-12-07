@@ -117,7 +117,6 @@ class PopMelody(melody.CommonMelody):
                         inner_idx = idx + delta
                         if 0 <= inner_idx < len(scale):
                             chord_factor[inner_idx] = max(chord_factor[inner_idx], 4 - abs(delta))
-                break
         prob = [0] * sz
         for i in range(sz):
             prob[i] = prob_list[i] ** (2 if prev_note.duration.quarterLength + dur <= 0.75 else 1) * chord_factor[i]

@@ -50,7 +50,6 @@ class CommonMelody(Melody):
                         inner_idx = idx + delta
                         if 0 <= inner_idx < len(scale):
                             chord_factor[inner_idx] = max(chord_factor[inner_idx], 4 - abs(delta))
-                break
 
         prob = [0] * sz
         for i in range(sz):
