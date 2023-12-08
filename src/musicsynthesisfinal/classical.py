@@ -4,7 +4,7 @@ import music21
 
 import beat
 import chord
-import data
+import utils
 import melody
 
 
@@ -33,7 +33,7 @@ class ClassicalBeat(beat.Beat):
             float: The duration of the beat in quarter note units.
         """
 
-        r = data.weight_random_valuable(self.durationProbability)
+        r = utils.weight_random_valuable(self.durationProbability)
         return 2 ** (r - 3)
 
     def generate_beat(self, n: int) -> list[music21.duration.Duration]:
@@ -87,24 +87,48 @@ class ClassicalChord(chord.Chord):
         self.lastChord = 'ST'
         self.tone = tone
 
-    def generate_chord(self, dur=1) -> music21.chord.Chord:
+    def generate_chord(self) -> music21.chord.Chord:
         roman = self.generate_roman()
         roman = music21.roman.RomanNumeral(self.__MAJOR_MINOR_CONVERT[str.islower(self.tone)][roman], self.tone)
         roman.semiClosedPosition(forceOctave=3, inPlace=True)
-        roman.duration = music21.duration.Duration(dur)
         return roman
 
     def __next_chord(self, now_location) -> None:
         val, pro = list(self.__Auto__[now_location].keys()), \
             list(self.__Auto__[now_location].values())
-        choose = data.weight_random_valuable(pro)
+        choose = utils.weight_random_valuable(pro)
         while val[choose] == self.lastChord:
-            choose = data.weight_random_valuable(pro)
+            choose = utils.weight_random_valuable(pro)
         self.lastChord, self.nowChord = self.nowChord, val[choose]
 
     def generate_roman(self) -> int:
         ret = self.nowChord
         self.__next_chord(self.nowChord)
+        return ret
+
+    def generate_chord_list(self, beat: list[music21.duration.Duration]) -> list[music21.chord.Chord]:
+        dur = 0.0
+        offset = 0.0
+        ret = []
+        for bt in [x.quarterLength for x in beat]:
+            if dur.is_integer() and dur != 0:
+                if dur > 4:
+                    tmp = self.generate_chord()
+                    tmp.duration = music21.duration.Duration(4)
+                    ret.append(tmp)
+                    tmp = self.generate_chord()
+                    tmp.duration = music21.duration.Duration(dur-4)
+                    ret.append(tmp)
+                else:
+                    tmp = self.generate_chord()
+                    tmp.duration = music21.duration.Duration(dur)
+                    ret.append(tmp)
+                dur = 0
+            offset += bt
+            dur += bt
+        tmp = self.generate_chord()
+        tmp.duration = music21.duration.Duration(dur)
+        ret.append(tmp)
         return ret
 
 

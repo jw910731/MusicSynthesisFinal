@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
 import music21
-import beat, chord
 import typing
-import data
+import utils
 import random
 
 
@@ -32,7 +31,7 @@ class CommonMelody(Melody):
         prob_list = [1] * sz
         chord_factor = [1] * sz
         # Construct magic probability factor
-        ind_last = data.index(scale, prev_note.pitch, lambda x, y: x.isEnharmonic(y))
+        ind_last = utils.index(scale, prev_note.pitch, lambda x, y: x.isEnharmonic(y))
         if ind_last != -1:
             for i in range(len(scale)):
                 dis = abs(ind_last - i)
@@ -54,13 +53,13 @@ class CommonMelody(Melody):
         prob = [0] * sz
         for i in range(sz):
             prob[i] = prob_list[i] ** (2 if prev_note.duration.quarterLength + dur <= 0.75 else 1) * chord_factor[i]
-        ret_note = scale[data.weight_random_valuable(prob)]
+        ret_note = scale[utils.weight_random_valuable(prob)]
         return music21.note.Note(ret_note, quarterLength=dur)
 
     def generate_melody(self) -> list[music21.note.Note]:
         part_melody = []
         pitch = -1
-        while pitch == -1 or pitch % 12 not in [data.NOTE_NUMBER_CONV[x] - 12 for x in data.NATURAL_SCALE[self.tone]]:
+        while pitch == -1 or pitch % 12 not in [utils.NOTE_NUMBER_CONV[x] - 12 for x in utils.NATURAL_SCALE[self.tone]]:
             pitch = random.randint(53, 77)
         last_note = music21.note.Note(midi=pitch, quarterLength=4)
         offset = 0

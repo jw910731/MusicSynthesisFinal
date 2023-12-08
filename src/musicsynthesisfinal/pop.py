@@ -7,7 +7,7 @@ import music21
 import beat
 import chord
 import melody
-import data
+import utils
 
 
 class PopBeat(beat.Beat):
@@ -15,7 +15,7 @@ class PopBeat(beat.Beat):
         self.bpm = random.randint(90, 150)
         pass
 
-    def __beat_recursive(self, size: float, part: float) -> list[int]:
+    def __beat_recursive(self, size: float, part: float) -> list[float]:
         if size <= 0.25:
             return [size]
         if part == 6 and size == 2:
@@ -36,13 +36,13 @@ class PopBeat(beat.Beat):
     def get_bpm(self):
         return self.bpm
 
-    def generate_bass(self):
+    def generate_bass(self, instrument: music21.instrument.BassDrum) -> music21.stream.Measure | music21.stream.Part:
         pass
 
-    def generate_hihat(self):
+    def generate_hihat(self, instrument: music21.instrument.BassDrum) -> music21.stream.Measure | music21.stream.Part:
         pass
 
-    def generate_snare(self):
+    def generate_snare(self, instrument: music21.instrument.BassDrum) -> music21.stream.Measure | music21.stream.Part:
         pass
 
 
@@ -73,12 +73,12 @@ class PopChord(chord.Chord):
         for bt in beat:
             cnt += bt.quarterLength
         for i in range(int(cnt) // 8):
-            thisChord = self.generate_chord()
+            this_chord = self.generate_chord()
             length = 8 if random.randint(1, 100) <= 27 else 4
-            thisChord.quarterLength = length
-            ret.append(thisChord)
+            this_chord.quarterLength = length
+            ret.append(this_chord)
             if length == 4:
-                ret.append(copy.deepcopy(thisChord))
+                ret.append(copy.deepcopy(this_chord))
         return ret
 
 
@@ -99,7 +99,7 @@ class PopMelody(melody.CommonMelody):
         chord_factor = [1] * sz
         # Construct magic probability factor
         # print(prev_note)
-        ind_last = data.index(scale, prev_note.pitch, lambda x, y: x.isEnharmonic(y))
+        ind_last = utils.index(scale, prev_note.pitch, lambda x, y: x.isEnharmonic(y))
         if ind_last != -1:
             for i in range(len(scale)):
                 dis = abs(ind_last - i)
@@ -120,13 +120,13 @@ class PopMelody(melody.CommonMelody):
         prob = [0] * sz
         for i in range(sz):
             prob[i] = prob_list[i] ** (2 if prev_note.duration.quarterLength + dur <= 0.75 else 1) * chord_factor[i]
-        ret_note = scale[data.weight_random_valuable(prob)]
+        ret_note = scale[utils.weight_random_valuable(prob)]
         return music21.note.Note(ret_note, quarterLength=dur)
 
     def generate_melody(self) -> list[music21.note.Note]:
         part_melody = []
         pitch = -1
-        while pitch == -1 or pitch % 12 not in [data.NOTE_NUMBER_CONV[x] - 12 for x in data.NATURAL_SCALE[self.tone]]:
+        while pitch == -1 or pitch % 12 not in [utils.NOTE_NUMBER_CONV[x] - 12 for x in utils.NATURAL_SCALE[self.tone]]:
             pitch = random.randint(57, 77)
         last_note = music21.note.Note(midi=pitch, quarterLength=4)
         offset = 0

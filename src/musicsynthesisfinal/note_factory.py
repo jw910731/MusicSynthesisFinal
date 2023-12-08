@@ -32,10 +32,10 @@ class RandomNoteFactory(NoteFactory):
         self._lower_bound = lower_bound
         self._upper_bound = upper_bound
 
-    def get_notes(self) -> music21.note.Note:
+    def get_notes(self) -> music21.stream.Part:
         ret = music21.stream.base.Part()
         for _ in range(8):
-            noteStr = random.choice(
+            note_str = random.choice(
                 self.SCALE) + str(random.randint(self._lower_bound, self._upper_bound))
-            ret.append(music21.note.Note(noteStr))
+            ret.append(music21.note.Note(note_str))
         return ret
