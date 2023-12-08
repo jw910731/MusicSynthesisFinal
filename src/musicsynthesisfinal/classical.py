@@ -91,7 +91,7 @@ class ClassicalChord(chord.Chord):
         roman = self.generate_roman()
         roman = music21.roman.RomanNumeral(self.__MAJOR_MINOR_CONVERT[str.islower(self.tone)][roman], self.tone)
         roman.semiClosedPosition(forceOctave=3, inPlace=True)
-        return roman
+        return chord.limit_inversion(roman)
 
     def __next_chord(self, now_location) -> None:
         val, pro = list(self.__Auto__[now_location].keys()), \
