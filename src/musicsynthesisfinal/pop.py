@@ -187,27 +187,44 @@ class Pop:
         
         intro_beat=copy.deepcopy(chorus_beat)
         cnt = 0
-        while cnt < 8:
-            cnt += intro_beat[0].quarterLength
-            intro_beat.pop(0)
+        for x in intro_beat:
+            cnt += x.quarterLength
+        while cnt > 8:
+            cnt -= intro_beat[0].quarterLength
+            if cnt >= 8:
+                intro_beat.pop(0)
+            else:
+                intro_beat[0].quarterLength = 8-cnt
         for i in intro_beat:
             i.quarterLength *=1.5
         intro_beat[-1].quarterLength+=4
             
         intro_chordpro=copy.deepcopy(chorus_chordpro)
         cnt = 0
-        while cnt < 8:
-            cnt += intro_chordpro[0].quarterLength
-            intro_chordpro.pop(0)
+        for x in intro_chordpro:
+            cnt += x.quarterLength
+        while cnt > 8:
+            cnt -= intro_chordpro[0].quarterLength
+            if cnt >= 8:
+                intro_chordpro.pop(0)
+            else:
+                intro_chordpro[0].quarterLength = 8-cnt
         # print([x.quarterLength for x in intro_chordpro])
         for i in intro_chordpro:
+            print(i.quarterLength)
             i.quarterLength *=1.5
         intro_chordpro[-1].quarterLength+=4
         intro_melody=copy.deepcopy(chorus_melody)
         cnt = 0
-        while cnt < 8:
-            cnt += intro_melody[0].quarterLength
-            intro_melody.pop(0)
+        for x in intro_melody:
+            cnt += x.quarterLength
+        while cnt > 8:
+            cnt -= intro_melody[0].quarterLength
+            
+            if cnt >= 8:
+                intro_melody.pop(0)
+            else:
+                intro_melody[0].quarterLength = 8-cnt
         for i in intro_melody:
             i.quarterLength *=1.5
         intro_melody[-1].quarterLength += 4
@@ -232,7 +249,7 @@ class Pop:
             part_chord.append(copy.deepcopy(c))
         for x in intro_melody:
             part_melody.append(copy.deepcopy(x))
-        for _ in range(2):
+        for _ in range(1):
             for c in verse_chordpro:
                 part_chord.append(copy.deepcopy(c))
             for x in verse_melody:
