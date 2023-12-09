@@ -98,7 +98,6 @@ class PopMelody(melody.CommonMelody):
         prob_list = [1] * sz
         chord_factor = [1] * sz
         # Construct magic probability factor
-        # print(prev_note)
         ind_last = utils.index(scale, prev_note.pitch, lambda x, y: x.isEnharmonic(y))
         if ind_last != -1:
             for i in range(len(scale)):
@@ -112,7 +111,7 @@ class PopMelody(melody.CommonMelody):
             # Iterate through all pitch in scale
             for chord_pitches in pitch:
                 # if the pitch matches the chord -> do magic
-                if scale_pitch.isEnharmonic(chord_pitches):
+                if scale_pitch.pitchClass == chord_pitches.pitchClass:
                     for delta in range(-3, 3 + 1):
                         inner_idx = idx + delta
                         if 0 <= inner_idx < len(scale):

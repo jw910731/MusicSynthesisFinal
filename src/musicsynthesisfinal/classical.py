@@ -135,7 +135,6 @@ class ClassicalChord(chord.Chord):
 class ClassicalMelody(melody.CommonMelody):
     def __init__(self, beat: list[music21.duration.Duration], chord: list[music21.chord.Chord], tone) -> None:
         super().__init__(beat, chord, tone)
-        pass
 
     # def generate_melody(self) -> music21.stream.Measure:
     #     # how to pass the chord and beat?
