@@ -44,7 +44,7 @@ class CommonMelody(Melody):
             # Iterate through all pitch in scale
             for chord_pitches in pitch:
                 # if the pitch matches the chord -> do magic
-                if scale_pitch.isEnharmonic(chord_pitches):
+                if scale_pitch.pitchClass == chord_pitches.pitchClass:
                     for delta in range(-3, 3 + 1):
                         inner_idx = idx + delta
                         if 0 <= inner_idx < len(scale):
