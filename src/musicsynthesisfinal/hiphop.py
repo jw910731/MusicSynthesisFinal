@@ -1,17 +1,34 @@
-import beat, chord, melody
-import music21
+import copy
 import random
+
+import music21
+
+import beat
+import melody
+import pop
 
 
 class HiphopBeat(beat.Beat):
     def __init__(self):
-        self.bpm = 0
+        self.bpm = 120
 
-    def __get_random_beat(self):
-        pass
+    def __beat_recursive(self, size: float, part: float) -> list[float]:
+        if size <= 0.25:
+            return [size]
+        if part == 6 and size == 2:
+            if random.randint(1, 100) <= 10:
+                return [size]
+        if size <= 2 and random.random() <= (1 / (1.05 * size)) ** 0.5:
+            return [size]
+        return self.__beat_recursive(size / 2, part) + self.__beat_recursive(size / 2, part + size / 2)
 
     def generate_beat(self, n) -> list[music21.duration.Duration]:
-        pass
+        ret = []
+        for i in range(0, n, 8):
+            ls = self.__beat_recursive(min(n - i, 8), 0)
+            for x in ls:
+                ret.append(music21.duration.Duration(x))
+        return ret
 
     def get_bpm(self):
         return self.bpm
@@ -26,18 +43,37 @@ class HiphopBeat(beat.Beat):
         pass
 
 
-class HiphopChord(chord.Chord):
-    def generate_chord(self) -> music21.chord.Chord:
-        pass
-
-
-class HiphopMelody(melody.Melody):
-    def generate_melody(self) -> music21.stream.Measure:
-        pass
+class HiphopChord(pop.PopChord):
+    def __init__(self, tone):
+        super().__init__(tone)
 
 
 class Hiphop:
-    def __init__(self):
-        self.melody = HiphopMelody
-        self.chord = HiphopChord
-        self.beat = HiphopBeat
+    def __init__(self, tone = 'F#'):
+        self.chord = HiphopChord(tone)
+        self.beat = HiphopBeat()
+        self.tone = tone
+
+    def generate_music(self):
+        part_chord = music21.stream.Part()
+        part_chord.insert(0, music21.tempo.MetronomeMark(number=self.beat.get_bpm()))
+        part_chord.insert(0, music21.key.Key(self.tone))
+        part_melody = music21.stream.Part()
+        part_melody.insert(0, music21.tempo.MetronomeMark(number=self.beat.get_bpm()))
+        part_melody.insert(0, music21.key.Key(self.tone))
+
+        for _ in range(4):
+            bt = self.beat.generate_beat(8)
+            ch = self.chord.generate_chord_list(bt)
+            mel = melody.CommonMelody(bt, ch, self.tone)
+            m = mel.generate_melody()
+            for _ in range(4):
+                for c in ch:
+                    part_chord.append(copy.deepcopy(c))
+                for x in m:
+                    part_melody.append(copy.deepcopy(x))
+
+        return part_melody, part_chord
+
+
+
