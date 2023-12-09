@@ -21,7 +21,7 @@ class PopBeat(beat.Beat):
         if part == 6 and size == 2:
             if random.randint(1, 100) <= 10:
                 return [size]
-        if size <= 1 and random.random() <= (1 / (4 * size)) ** 0.5:
+        if size <= 1 and random.random() <= (1 / (2 * size)) ** 0.5:
             return [size]
         return self.__beat_recursive(size / 2, part) + self.__beat_recursive(size / 2, part + size / 2)
 
