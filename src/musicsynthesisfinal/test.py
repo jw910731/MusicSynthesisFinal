@@ -4,34 +4,34 @@
 # import pop
 # import music21
 # # import pop
-# import data
+# import utils
 
-# # chordProcessor = ['C', 'G/B', 'Am', 'Em/G', 'F', 'C/E', 'Dm', 'G']
-# # chordProcessor2 = ['C', 'G/B', 'Am', 'C/G', 'F', 'C/E', 'Dm', 'G']
+# chordProcessor = ['C', 'G/B', 'Am', 'Em/G', 'F', 'C/E', 'Dm', 'G']
+# chordProcessor2 = ['C', 'G/B', 'Am', 'C/G', 'F', 'C/E', 'Dm', 'G']
 
-# # c = music21.chord.Chord()
-# # tone = 'C'
-# # bala = []
-# # for i in range(10):
-# #     bala.append(pop.PopChord(tone))
-# # s = music21.stream.Stream()
-# # s.insert(0, music21.tempo.MetronomeMark(number=95))
-# # s.insert(0, music21.key.Key(tone))
-# # for i in bala:
-# #     for x in range(16):
-# #         s.append(i.generate_chord())
-# # print(bala.progressions)
-# # s.show()
+# c = music21.chord.Chord()
+# tone = 'C'
+# bala = []
+# for i in range(10):
+#     bala.append(pop.PopChord(tone))
+# s = music21.stream.Stream()
+# s.insert(0, music21.tempo.MetronomeMark(number=95))
+# s.insert(0, music21.key.Key(tone))
+# for i in bala:
+#     for x in range(16):
+#         s.append(i.generate_chord())
+# print(bala.progressions)
+# s.show()
 
 # s = music21.stream.Stream()
 
 # # s.insert(0, music21.instrument.BassDrum())
 # s.insert(0, music21.instrument.SnareDrum())
 # # s.insert(0, music21.instrument.HiHatCymbal())
-# hihat = random.choice(data.HIHAT_SCALE)
-# bass = random.choice(data.BASS_SCALE)
-# snare = random.choice(data.SNARE_SCALE)
-# clap = random.choice(data.CLAP_SCALE)
+# hihat = random.choice(utils.HIHAT_SCALE)
+# bass = random.choice(utils.BASS_SCALE)
+# snare = random.choice(utils.SNARE_SCALE)
+# clap = random.choice(utils.CLAP_SCALE)
 # # # boommap
 # bassloop = [1,-1,1,-4,1,1,-1,1,-5]
 # bassbasicbeat = 0.25
@@ -43,28 +43,28 @@
 # clapbasicbeat = 1
 # bpm = 90
 
-# # # trap
-# # bassloop = [4,1,-1,1,-1,-24,4,1,-1,1,-1,-20,-1,1,-1,1]
-# # bassbasicbeat = 0.25
-# # snareloop = [-4,1,-1,1,1,-4,1,-3, 4,-8,1,-1,1,1,-12,1,-1,1,1,4,1,-1,1,1,-4,1,-3]
-# # snarebasicbeat = 0.25
-# # hihatloop = [1,-1,1,-1,1,1,1,-1,1,-1,1,-1,1,-1,1,-1]
-# # hihatbasicbeat = 0.25
-# # claploop = [1,-1,1,-1,-2,1,-1]
-# # clapbasicbeat = 1
-# # bpm = 170
+# # trap
+# bassloop = [4,1,-1,1,-1,-24,4,1,-1,1,-1,-20,-1,1,-1,1]
+# bassbasicbeat = 0.25
+# snareloop = [-4,1,-1,1,1,-4,1,-3, 4,-8,1,-1,1,1,-12,1,-1,1,1,4,1,-1,1,1,-4,1,-3]
+# snarebasicbeat = 0.25
+# hihatloop = [1,-1,1,-1,1,1,1,-1,1,-1,1,-1,1,-1,1,-1]
+# hihatbasicbeat = 0.25
+# claploop = [1,-1,1,-1,-2,1,-1]
+# clapbasicbeat = 1
+# bpm = 170
 
 
-# # # drill
-# # bassloop = [4,-4,-4,4,-4,4,-4,4,4, -4,-4,4,-4,4,4,1,1,-2]
-# # bassbasicbeat = 0.25
-# # snareloop = [-1,-1,1,-1,-1,-1,-1,1,-1,-1,1,-1,-1,-1,1,1]
-# # snarebasicbeat = 1
-# # hihatloop = [1,-1,-1,1, -1,-1,1,-1, 1,-1,-1,1, -1,-1,1,-1, 1,-1,-1,1, -1,-1,1,-1, 1,-1,1,-1, 1,-1,1,-1]
-# # hihatbasicbeat = 0.25
-# # claploop = [-4]
-# # clapbasicbeat = 1
-# # bpm = 140
+# # drill
+# bassloop = [4,-4,-4,4,-4,4,-4,4,4, -4,-4,4,-4,4,4,1,1,-2]
+# bassbasicbeat = 0.25
+# snareloop = [-1,-1,1,-1,-1,-1,-1,1,-1,-1,1,-1,-1,-1,1,1]
+# snarebasicbeat = 1
+# hihatloop = [1,-1,-1,1, -1,-1,1,-1, 1,-1,-1,1, -1,-1,1,-1, 1,-1,-1,1, -1,-1,1,-1, 1,-1,1,-1, 1,-1,1,-1]
+# hihatbasicbeat = 0.25
+# claploop = [-4]
+# clapbasicbeat = 1
+# bpm = 140
 
 # def gen(loop, basicbeat, total, pitch, bpm):
 #     now = 0

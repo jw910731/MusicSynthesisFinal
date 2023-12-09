@@ -1,4 +1,6 @@
 import copy
+import chord, utils
+from hiphoptemplate import *
 import random
 
 import music21
@@ -8,9 +10,11 @@ import melody
 import pop
 
 
+
 class HiphopBeat(beat.Beat):
     def __init__(self):
-        self.bpm = 120
+        self.type = random.choice(["drill", "trap", "Boombap"])
+        self.bpm = 0
 
     def __beat_recursive(self, size: float, part: float) -> list[float]:
         if size <= 0.25:
