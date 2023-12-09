@@ -16,13 +16,16 @@ class FolkBeat(beat.Beat):
     def get_bpm(self):
         return self.bpm
 
-    def generate_bass(self, instrument: music21.instrument.BassDrum) -> music21.stream.Measure | music21.stream.Part:
+    def generate_bass(self) -> list[music21.note.Note]:
         pass
 
-    def generate_hihat(self, instrument: music21.instrument.BassDrum) -> music21.stream.Measure | music21.stream.Part:
+    def generate_hihat(self) -> list[music21.note.Note]:
         pass
 
-    def generate_snare(self, instrument: music21.instrument.BassDrum) -> music21.stream.Measure | music21.stream.Part:
+    def generate_snare(self) -> list[music21.note.Note]:
+        pass
+
+    def generate_clap(self) -> list[music21.note.Note]:
         pass
 
 

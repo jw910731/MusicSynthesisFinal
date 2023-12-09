@@ -10,14 +10,13 @@ import melody
 import pop
 
 
-
 class HiphopBeat(beat.Beat):
     def __init__(self):
-        self.hiphoptype = random.choice([drill]) # , trap, boombap
+        self.hiphoptype = random.choice([drill])  # , trap, boombap
         self.bass = random.choice(self.hiphoptype.Bass)
         self.hihat = random.choice(self.hiphoptype.Hihat)
         self.snare = random.choice(self.hiphoptype.Snare)
-        self.clap= random.choice(self.hiphoptype.Clap)
+        self.clap = random.choice(self.hiphoptype.Clap)
         self.bpm = random.randint(*self.hiphoptype.bpmrange)
 
     def __beat_recursive(self, size: float, part: float) -> list[float]:
@@ -45,14 +44,14 @@ class HiphopBeat(beat.Beat):
         ret = []
         for i in range(8):
             if self.bass.Template[i]:
-                #gen_beat
+                # gen_beat
                 du = self.bass.TemplateSplitway[i]
                 for p in self.bass.Probability[i]:
                     if random.random() <= p:
-                        ret.append(music21.note.Note(self.bass.pitch, quarterLength = du))
+                        ret.append(music21.note.Note(self.bass.pitch, quarterLength=du))
                     else:
-                        ret.append(music21.note.Rest( quarterLength = du))
-                        
+                        ret.append(music21.note.Rest(quarterLength=du))
+
             else:
                 ret.append(music21.note.Rest(quarterLength=1))
         return ret
@@ -61,49 +60,50 @@ class HiphopBeat(beat.Beat):
         ret = []
         for i in range(8):
             if self.hihat.Template[i]:
-                #gen_beat
+                # gen_beat
                 du = self.hihat.TemplateSplitway[i]
                 for p in self.hihat.Probability[i]:
                     if random.random() <= p:
-                        ret.append(music21.note.Note(self.hihat.pitch, quarterLength = du))
+                        ret.append(music21.note.Note(self.hihat.pitch, quarterLength=du))
                     else:
-                        ret.append(music21.note.Rest( quarterLength = du))
-                        
+                        ret.append(music21.note.Rest(quarterLength=du))
+
             else:
                 ret.append(music21.note.Rest(quarterLength=1))
         return ret
-
 
     def generate_snare(self) -> list[music21.note.Note]:
         ret = []
         for i in range(8):
             if self.snare.Template[i]:
-                #gen_beat
+                # gen_beat
                 du = self.snare.TemplateSplitway[i]
                 for p in self.snare.Probability[i]:
                     if random.random() <= p:
-                        ret.append(music21.note.Note(self.snare.pitch, quarterLength = du))
+                        ret.append(music21.note.Note(self.snare.pitch, quarterLength=du))
                     else:
-                        ret.append(music21.note.Rest( quarterLength = du))
-                        
+                        ret.append(music21.note.Rest(quarterLength=du))
+
             else:
                 ret.append(music21.note.Rest(quarterLength=1))
         return ret
+
     def generate_clap(self) -> list[music21.note.Note]:
         ret = []
         for i in range(8):
             if self.clap.Template[i]:
-                #gen_beat
+                # gen_beat
                 du = self.clap.TemplateSplitway[i]
                 for p in self.clap.Probability[i]:
                     if random.random() <= p:
-                        ret.append(music21.note.Note(self.clap.pitch, quarterLength = du))
+                        ret.append(music21.note.Note(self.clap.pitch, quarterLength=du))
                     else:
-                        ret.append(music21.note.Rest( quarterLength = du))
-                        
+                        ret.append(music21.note.Rest(quarterLength=du))
+
             else:
                 ret.append(music21.note.Rest(quarterLength=1))
         return ret
+
 
 class HiphopChord(pop.PopChord):
     def __init__(self, tone):
@@ -111,7 +111,7 @@ class HiphopChord(pop.PopChord):
 
 
 class Hiphop:
-    def __init__(self, tone = 'F#'):
+    def __init__(self, tone='F#'):
         self.chord = HiphopChord(tone)
         self.beat = HiphopBeat()
         self.tone = tone
@@ -136,6 +136,3 @@ class Hiphop:
                     part_melody.append(copy.deepcopy(x))
 
         return part_melody, part_chord
-
-
-

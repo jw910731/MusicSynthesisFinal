@@ -11,13 +11,17 @@ class Beat(ABC):
         return NotImplemented
 
     @abstractmethod
-    def generate_bass(self, instrument: music21.instrument.BassDrum) -> music21.stream.Measure | music21.stream.Part:
+    def generate_bass(self) -> list[music21.note.Note]:
         return NotImplemented
 
     @abstractmethod
-    def generate_hihat(self, instrument: music21.instrument.BassDrum) -> music21.stream.Measure | music21.stream.Part:
+    def generate_hihat(self) -> list[music21.note.Note]:
         return NotImplemented
 
     @abstractmethod
-    def generate_snare(self, instrument: music21.instrument.BassDrum) -> music21.stream.Measure | music21.stream.Part:
+    def generate_snare(self) -> list[music21.note.Note]:
+        return NotImplemented
+
+    @abstractmethod
+    def generate_clap(self) -> list[music21.note.Note]:
         return NotImplemented
