@@ -124,41 +124,34 @@ class Hiphop:
         part_melody.insert(0, music21.tempo.MetronomeMark(number=self.beat.get_bpm()))
         part_melody.insert(0, music21.key.Key(self.tone))
         instrument = music21.instrument.BassDrum()
-        part_bass  = music21.stream.Part()
+        part_bass = music21.stream.Part()
         part_bass.insert(0, music21.tempo.MetronomeMark(number=self.beat.get_bpm()))
-        part_bass.insert(0, instrument)
-        part_hihat  = music21.stream.Part()
+        part_bass.insert(0, copy.deepcopy(instrument))
+        part_hihat = music21.stream.Part()
         part_hihat.insert(0, music21.tempo.MetronomeMark(number=self.beat.get_bpm()))
-        part_hihat.insert(0, instrument)
-        part_clap  = music21.stream.Part()
+        part_hihat.insert(0, copy.deepcopy(instrument))
+        part_clap = music21.stream.Part()
         part_clap.insert(0, music21.tempo.MetronomeMark(number=self.beat.get_bpm()))
-        part_clap.insert(0, instrument)
-        part_snare  = music21.stream.Part()
+        part_clap.insert(0, copy.deepcopy(instrument))
+        part_snare = music21.stream.Part()
         part_snare.insert(0, music21.tempo.MetronomeMark(number=self.beat.get_bpm()))
-        part_snare.insert(0, instrument)
-        for x in range(2):
+        part_snare.insert(0, copy.deepcopy(instrument))
+        for x in range(4):
             bt = self.beat.generate_beat(8)
             ch = self.chord.generate_chord_list(bt)
             mel = melody.CommonMelody(bt, ch, self.tone)
             m = mel.generate_melody()
-            # print(bass)
             bass = self.beat.generate_bass()
             snare = self.beat.generate_snare()
             clap = self.beat.generate_clap()
             hihat = self.beat.generate_hihat()
-            # print([x.duration.quarterLength for x in hihat])
-            for x in bass:
-                print(x, x.quarterLength)
-                part_bass.append(x)
-            # for y in range(4):
-            #     for a,b in zip([part_chord, part_melody], [ch, m]):
-            #         for r in b:
-            #             a.append(copy.deepcopy(r))
-            #     for a,b in zip([part_chord, part_melody, part_bass, part_hihat, part_snare, part_clap], [ch, m, bass, hihat, snare, clap]):
-            #         print(b)
-            #         for r in b:
-            #             a.append(copy.deepcopy(r))
-        part_bass.show('text')
+            for y in range(2):
+                for a, b in zip([part_chord, part_melody], [ch, m]):
+                    for r in b:
+                        a.append(copy.deepcopy(r))
+                for a, b in zip([part_chord, part_melody, part_bass, part_hihat, part_snare, part_clap],
+                                [ch, m, bass, hihat, snare, clap]):
+                    for r in b:
+                        a.append(copy.deepcopy(r))
         # return part_hihat
-        return part_bass
         return part_melody, part_chord, part_bass, part_snare, part_clap, part_hihat
