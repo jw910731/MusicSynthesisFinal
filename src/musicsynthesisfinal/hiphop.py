@@ -12,13 +12,14 @@ import pop
 
 class HiphopBeat(beat.Beat):
     def __init__(self):
-        self.hiphoptype = random.choice([drill])  # , trap, boombap
+        self.hiphoptype = random.choice([Drill().drill, Boombap().boombap])  # , trap, boombap
         self.bass = random.choice(self.hiphoptype.Bass)
         self.hihat = random.choice(self.hiphoptype.Hihat)
         self.snare = random.choice(self.hiphoptype.Snare)
         self.clap = random.choice(self.hiphoptype.Clap)
         self.bpm = random.randint(*self.hiphoptype.bpmrange)
-
+        self.prefixProbability = [0,0.3,0.3,0.4]
+        self.postfixProbability = [0.4,0.3,0.3,0]
     def __beat_recursive(self, size: float, part: float) -> list[float]:
         if size <= 0.25:
             return [size]
@@ -39,7 +40,46 @@ class HiphopBeat(beat.Beat):
 
     def get_bpm(self):
         return self.bpm
-
+    def get_extention(self, original:list[music21.note.Note], pitch)->list[music21.note.Note]:
+        cnt = 0
+        ret = original
+        for i in range(len(ret)):
+            if isinstance(cnt, int):
+                check = 0
+                c = 0
+                offset = 0
+                while(c <= 1):
+                    if(ret[i+offset].isNote):
+                        check = 1
+                    c+=ret[i+offset].quarterLength
+                    offset+=1
+                if check:
+                    # postfix
+                    if random.random() <= abs(cnt-0.75)/10.8:
+                        offset2 = 0
+                        if(ret[(i+offset+offset2) % len(ret)].quarterLength != 0.25):
+                            ret[(i+offset+offset2) % len(ret)].quarterLength = 0.25
+                            ret.insert(i+offset+offset2+1, music21.note.Rest(quarterLength = 0.25))
+                            ret.insert(i+offset+offset2+1, music21.note.Rest(quarterLength = 0.25))
+                            ret.insert(i+offset+offset2+1, music21.note.Rest(quarterLength = 0.25))
+                        while ret[(i+offset+offset2) % len(ret)].isRest and offset2<4:
+                            if(random.random()<=self.postfixProbability[offset2]):
+                                ret[(i+offset+offset2) % len(ret)] = music21.note.Note(pitch, quarterLength = ret[(i+offset+offset2) % len(ret)].quarterLength)
+                            offset2+=1
+                    #prefix
+                    if random.random() <= abs(cnt-0.75)/10.8:
+                        offset2 = 0
+                        if(ret[(i-offset2+ len(ret)) % len(ret)].quarterLength != 0.25):
+                            ret[(i-offset2+ len(ret)) % len(ret)].quarterLength = 0.25
+                            ret.insert((i-offset2-1+ len(ret)) % len(ret), music21.note.Rest(quarterLength = 0.25))
+                            ret.insert((i-offset2-1+ len(ret)) % len(ret), music21.note.Rest(quarterLength = 0.25))
+                            ret.insert((i-offset2-1+ len(ret)) % len(ret), music21.note.Rest(quarterLength = 0.25))
+                        while ret[(i-offset2+ len(ret)) % len(ret)].isRest and offset2<4:
+                            if(random.random()<=self.prefixProbability[offset2]):
+                                ret[(i-offset2+ len(ret)) % len(ret)] = music21.note.Note(pitch, quarterLength = ret[(i-offset2+ len(ret)) % len(ret)].quarterLength)
+                            offset2+=1
+            cnt += ret[i].quarterLength
+        return ret            
     def generate_bass(self) -> list[music21.note.Note]:
         ret = []
         for i in range(16):
@@ -54,7 +94,7 @@ class HiphopBeat(beat.Beat):
 
             else:
                 ret.append(music21.note.Rest(quarterLength=1))
-        return ret
+        return self.get_extention(ret, self.bass.pitch)
 
     def generate_hihat(self) -> list[music21.note.Note]:
         ret = []
@@ -70,7 +110,7 @@ class HiphopBeat(beat.Beat):
 
             else:
                 ret.append(music21.note.Rest(quarterLength=1))
-        return ret
+        return self.get_extention(ret, self.hihat.pitch)
 
     def generate_snare(self) -> list[music21.note.Note]:
         ret = []
@@ -86,7 +126,7 @@ class HiphopBeat(beat.Beat):
 
             else:
                 ret.append(music21.note.Rest(quarterLength=1))
-        return ret
+        return self.get_extention(ret, self.snare.pitch)
 
     def generate_clap(self) -> list[music21.note.Note]:
         ret = []
@@ -102,7 +142,7 @@ class HiphopBeat(beat.Beat):
 
             else:
                 ret.append(music21.note.Rest(quarterLength=1))
-        return ret
+        return self.get_extention(ret, self.clap.pitch)
 
 
 class HiphopChord(pop.PopChord):
@@ -154,4 +194,5 @@ class Hiphop:
                     for r in b:
                         a.append(copy.deepcopy(r))
         # return part_hihat
+        # return part_bass, part_snare, part_clap, part_hihat
         return part_melody, part_chord, part_bass, part_snare, part_clap, part_hihat
