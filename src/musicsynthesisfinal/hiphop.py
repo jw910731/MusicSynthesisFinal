@@ -12,7 +12,7 @@ import pop
 
 class HiphopBeat(beat.Beat):
     def __init__(self):
-        self.hiphoptype = random.choice([Drill().drill, Boombap().boombap])  # , trap, boombap
+        self.hiphoptype = random.choice([Drill().drill, Boombap().boombap, Trap().trap])  # , trap, boombap
         self.bass = random.choice(self.hiphoptype.Bass)
         self.hihat = random.choice(self.hiphoptype.Hihat)
         self.snare = random.choice(self.hiphoptype.Snare)
