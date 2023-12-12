@@ -1,5 +1,6 @@
 import random
-import typing
+import typing, copy
+import music21
 
 NOTE_NUMBER_CONV = {
     'C': 12, 'C#': 13, 'D': 14, 'D#': 15, 'E': 16, 'F': 17, 'F#': 18, 'G': 19, 'G#': 20, 'A': 21, 'B-': 22, 'B': 23,
@@ -26,7 +27,32 @@ HIHAT_SCALE = [42]
 SNARE_SCALE = [37, 38, 40, 48, 50]
 CLAP_SCALE = [39]
 OPEN_HAT_SCALE = [46,49,51,52,55,57, 59,  44, 53,54]
-
+def cut_back(music:list, beat):
+    ret = copy.deepcopy(music)
+    cnt = 0
+    while(cnt < beat):
+        cnt += ret[-1].quarterLength
+        if cnt > beat:
+            ret[-1].quarterLength = cnt-beat
+        else:
+            ret.pop(-1)
+    return ret
+def set_up_part(bpm=120, tone='C', instrument = music21.instrument.Piano()):
+    pt = music21.stream.Part()
+    pt.insert(0, music21.tempo.MetronomeMark(number=bpm))
+    pt.insert(0, music21.key.Key(tone))
+    pt.insert(0, copy.deepcopy(instrument))
+    return pt
+def cut_front(music:list, beat):
+    ret = copy.deepcopy(music)
+    cnt = 0
+    while(cnt < beat):
+        cnt += ret[0].quarterLength
+        if cnt > beat:
+            ret[0].quarterLength = cnt-beat
+        else:
+            ret.pop(0)
+    return ret      
 def weight_random_valuable(probability):
     prefix = []
     # print(probability)

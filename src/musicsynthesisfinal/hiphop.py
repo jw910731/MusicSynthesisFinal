@@ -12,7 +12,7 @@ import pop
 
 class HiphopBeat(beat.Beat):
     def __init__(self):
-        self.hiphoptype = random.choice([Drill().drill, Boombap().boombap, Trap().trap])  # , trap, boombap
+        self.hiphoptype = random.choice([ Boombap().boombap, Drill().drill,Trap().trap])  # , trap, boombap
         self.bass = random.choice(self.hiphoptype.Bass)
         self.hihat = random.choice(self.hiphoptype.Hihat)
         self.snare = random.choice(self.hiphoptype.Snare)
@@ -26,7 +26,7 @@ class HiphopBeat(beat.Beat):
         if part == 6 and size == 2:
             if random.randint(1, 100) <= 10:
                 return [size]
-        if size <= 2 and random.random() <= (1 / (1.05 * size)) ** 0.5:
+        if size <= 2 and random.random() <= (1 / (1.8 * size)) ** 0.5:
             return [size]
         return self.__beat_recursive(size / 2, part) + self.__beat_recursive(size / 2, part + size / 2)
 
@@ -157,25 +157,13 @@ class Hiphop:
         self.tone = tone
 
     def generate_music(self):
-        part_chord = music21.stream.Part()
-        part_chord.insert(0, music21.tempo.MetronomeMark(number=self.beat.get_bpm()))
-        part_chord.insert(0, music21.key.Key(self.tone))
-        part_melody = music21.stream.Part()
-        part_melody.insert(0, music21.tempo.MetronomeMark(number=self.beat.get_bpm()))
-        part_melody.insert(0, music21.key.Key(self.tone))
-        instrument = music21.instrument.BassDrum()
-        part_bass = music21.stream.Part()
-        part_bass.insert(0, music21.tempo.MetronomeMark(number=self.beat.get_bpm()))
-        part_bass.insert(0, copy.deepcopy(instrument))
-        part_hihat = music21.stream.Part()
-        part_hihat.insert(0, music21.tempo.MetronomeMark(number=self.beat.get_bpm()))
-        part_hihat.insert(0, copy.deepcopy(instrument))
-        part_clap = music21.stream.Part()
-        part_clap.insert(0, music21.tempo.MetronomeMark(number=self.beat.get_bpm()))
-        part_clap.insert(0, copy.deepcopy(instrument))
-        part_snare = music21.stream.Part()
-        part_snare.insert(0, music21.tempo.MetronomeMark(number=self.beat.get_bpm()))
-        part_snare.insert(0, copy.deepcopy(instrument))
+        part_chord = utils.set_up_part(self.beat.get_bpm(), self.tone)
+        part_melody = utils.set_up_part(self.beat.get_bpm(), self.tone)
+        part_bass = utils.set_up_part(self.beat.get_bpm(), self.tone, music21.instrument.BassDrum())
+        part_hihat = utils.set_up_part(self.beat.get_bpm(), self.tone, music21.instrument.BassDrum())
+        part_clap = utils.set_up_part(self.beat.get_bpm(), self.tone, music21.instrument.BassDrum())
+        part_snare = utils.set_up_part(self.beat.get_bpm(), self.tone, music21.instrument.BassDrum())
+        
         for x in range(4):
             bt = self.beat.generate_beat(8)
             ch = self.chord.generate_chord_list(bt)
