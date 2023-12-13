@@ -152,12 +152,8 @@ class Classical:
         self.tone = tone
 
     def generate_music(self):
-        part_chord = music21.stream.Part()
-        part_chord.insert(0, music21.tempo.MetronomeMark(number=self.beat.get_bpm()))
-        part_chord.insert(0, music21.key.Key(self.tone))
-        part_melody = music21.stream.Part()
-        part_melody.insert(0, music21.tempo.MetronomeMark(number=self.beat.get_bpm()))
-        part_melody.insert(0, music21.key.Key(self.tone))
+        part_chord = utils.set_up_part(self.beat.get_bpm(), self.tone)
+        part_melody = utils.set_up_part(self.beat.get_bpm(), self.tone)
         ret = []
         for i in range(16):
             bt = self.beat.generate_beat(6)

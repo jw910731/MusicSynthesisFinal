@@ -161,12 +161,8 @@ class Pop:
         self.tone = tone
 
     def generate_music(self):
-        part_chord = music21.stream.Part()
-        part_chord.insert(0, music21.tempo.MetronomeMark(number=self.beat.get_bpm()))
-        part_chord.insert(0, music21.key.Key(self.tone))
-        part_melody = music21.stream.Part()
-        part_melody.insert(0, music21.tempo.MetronomeMark(number=self.beat.get_bpm()))
-        part_melody.insert(0, music21.key.Key(self.tone))
+        part_chord = utils.set_up_part(self.beat.get_bpm(), self.tone)
+        part_melody = utils.set_up_part(self.beat.get_bpm(), self.tone)
         ret = []
         
         verse_beat = []
@@ -236,7 +232,7 @@ class Pop:
                 part_chord.append(copy.deepcopy(c))
             for x in verse_melody:
                 part_melody.append(copy.deepcopy(x))
-            # add 爬階
+            # add 爬階 from verse_melody[-1] to chorus_melody[-1]
             for i in range(2):
                 for c in chorus_chordpro:
                     part_chord.append(copy.deepcopy(c))
