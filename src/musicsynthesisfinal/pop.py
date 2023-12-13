@@ -236,11 +236,22 @@ class Pop:
                 part_chord.append(copy.deepcopy(c))
             for x in verse_melody:
                 part_melody.append(copy.deepcopy(x))
+            # add 爬階
             for i in range(2):
                 for c in chorus_chordpro:
                     part_chord.append(copy.deepcopy(c))
                 for x in chorus_melody:
                     part_melody.append(copy.deepcopy(x))
+        for x in chorus_melody:
+            part_melody.append(copy.deepcopy(x))
+        for c in chorus_chordpro:
+            part_chord.append(music21.note.Rest(quarterLength=c.quarterLength))
+        for i in range(2):
+            for c in chorus_chordpro:
+                part_chord.append(copy.deepcopy(c))
+            for x in chorus_melody:
+                part_melody.append(copy.deepcopy(x))
+            # part_melody.append(copy.deepcopy(x))
         # for i in range(2):
         #     bt = self.beat.generate_beat(32)
         #     ch = self.chord.generate_chord_list(bt)
