@@ -159,9 +159,11 @@ class Pop:
         self.beat = PopBeat()
         self.tone = tone
 
+    def gen_part(self):
+        return utils.set_up_part(self.beat.get_bpm(), self.tone), utils.set_up_part(self.beat.get_bpm(), self.tone)
+
     def generate_music(self):
-        part_chord = utils.set_up_part(self.beat.get_bpm(), self.tone)
-        part_melody = utils.set_up_part(self.beat.get_bpm(), self.tone)
+        part_chord, part_melody = self.gen_part()
         ret = []
 
         verse_beat = []
