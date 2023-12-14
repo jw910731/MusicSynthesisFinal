@@ -1,46 +1,18 @@
-import beat, chord, melody
 import music21
-import random
+
+import pop
+import utils
 
 
-class FolkBeat(beat.Beat):
-    def __init__(self):
-        pass
+class Folk(pop.Pop):
+    def __init__(self, tone):
+        super().__init__(tone)
 
-    def __get_random_beat(self):
-        pass
+    def gen_part(self):
+        return (utils.set_up_part(self.beat.get_bpm(),
+                                  self.tone,
+                                  music21.instrument.AcousticGuitar()),
+                utils.set_up_part(self.beat.get_bpm(),
+                                  self.tone,
+                                  music21.instrument.AcousticGuitar()))
 
-    def generate_beat(self, n) -> list[music21.duration.Duration]:
-        pass
-
-    def get_bpm(self):
-        return self.bpm
-
-    def generate_bass(self) -> list[music21.note.Note]:
-        pass
-
-    def generate_hihat(self) -> list[music21.note.Note]:
-        pass
-
-    def generate_snare(self) -> list[music21.note.Note]:
-        pass
-
-    def generate_clap(self) -> list[music21.note.Note]:
-        pass
-
-
-class FolkChord(chord.Chord):
-    def generate_chord(self) -> music21.chord.Chord:
-        pass
-
-
-class FolkMelody(melody.Melody):
-    def generate_melody(self) -> music21.stream.Measure:
-        pass
-
-
-class Folk:
-    def __init__(self):
-        self.melody = FolkMelody
-        self.chord = FolkChord
-        self.beat = FolkBeat
