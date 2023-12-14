@@ -116,9 +116,11 @@
 # print(ls)
 # m.show()
 import music21
-import pop
-bala = pop.Pop('C')
-song = bala.generate_music()
+import hiphop, pop
+dri = hiphop.Hiphop('E')
+song = dri.generate_music()
+# bala = pop.Pop('E')
+# song  = bala.generate_music()
 s = music21.stream.Stream()
 for x in song:
     s.insert(0, x)

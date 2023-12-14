@@ -240,7 +240,12 @@ class Pop:
             for p in scale_obj.getPitches(verse_melody[-1].pitch, chorus_melody[0].pitch):
                 part_melody.append(music21.note.Note(p, quarterLength=1))
                 scale_len += 1
-            part_chord.append(music21.note.Rest(scale_len))
+                if scale_len == 4:
+                    break
+            # part_chord.append(music21.note.Rest(scale_len))
+            if scale_len != 0:
+                part_chord.append(copy.deepcopy(part_chord[-1]))
+                part_chord[-1].quarterLength = scale_len
             for i in range(2):
                 for c in chorus_chordpro:
                     part_chord.append(copy.deepcopy(c))
