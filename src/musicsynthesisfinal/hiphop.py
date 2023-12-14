@@ -12,14 +12,15 @@ import pop
 
 class HiphopBeat(beat.Beat):
     def __init__(self):
-        self.hiphoptype = random.choice([ Boombap().boombap, Drill().drill,Trap().trap])  # , trap, boombap
+        self.hiphoptype = random.choice([Boombap().boombap, Drill().drill, Trap().trap])  # , trap, boombap
         self.bass = random.choice(self.hiphoptype.Bass)
         self.hihat = random.choice(self.hiphoptype.Hihat)
         self.snare = random.choice(self.hiphoptype.Snare)
         self.clap = random.choice(self.hiphoptype.Clap)
         self.bpm = random.randint(*self.hiphoptype.bpmrange)
-        self.prefixProbability = [0,0.3,0.3,0.4]
-        self.postfixProbability = [0.4,0.3,0.3,0]
+        self.prefixProbability = [0, 0.3, 0.3, 0.4]
+        self.postfixProbability = [0.4, 0.3, 0.3, 0]
+
     def __beat_recursive(self, size: float, part: float) -> list[float]:
         if size <= 0.25:
             return [size]
@@ -40,7 +41,8 @@ class HiphopBeat(beat.Beat):
 
     def get_bpm(self):
         return self.bpm
-    def get_extention(self, original:list[music21.note.Note], pitch)->list[music21.note.Note]:
+
+    def get_extention(self, original: list[music21.note.Note], pitch) -> list[music21.note.Note]:
         cnt = 0
         ret = original
         for i in range(len(ret)):
@@ -48,38 +50,41 @@ class HiphopBeat(beat.Beat):
                 check = 0
                 c = 0
                 offset = 0
-                while(c <= 1):
-                    if(ret[i+offset].isNote):
+                while (c <= 1):
+                    if (ret[i + offset].isNote):
                         check = 1
-                    c+=ret[i+offset].quarterLength
-                    offset+=1
+                    c += ret[i + offset].quarterLength
+                    offset += 1
                 if check:
                     # postfix
-                    if random.random() <= abs(cnt-0.75)/10.8:
+                    if random.random() <= abs(cnt - 0.75) / 10.8:
                         offset2 = 0
-                        if(ret[(i+offset+offset2) % len(ret)].quarterLength != 0.25):
-                            ret[(i+offset+offset2) % len(ret)].quarterLength = 0.25
-                            ret.insert(i+offset+offset2+1, music21.note.Rest(quarterLength = 0.25))
-                            ret.insert(i+offset+offset2+1, music21.note.Rest(quarterLength = 0.25))
-                            ret.insert(i+offset+offset2+1, music21.note.Rest(quarterLength = 0.25))
-                        while ret[(i+offset+offset2) % len(ret)].isRest and offset2<4:
-                            if(random.random()<=self.postfixProbability[offset2]):
-                                ret[(i+offset+offset2) % len(ret)] = music21.note.Note(pitch, quarterLength = ret[(i+offset+offset2) % len(ret)].quarterLength)
-                            offset2+=1
-                    #prefix
-                    if random.random() <= abs(cnt-0.75)/10.8:
+                        if (ret[(i + offset + offset2) % len(ret)].quarterLength != 0.25):
+                            ret[(i + offset + offset2) % len(ret)].quarterLength = 0.25
+                            ret.insert(i + offset + offset2 + 1, music21.note.Rest(quarterLength=0.25))
+                            ret.insert(i + offset + offset2 + 1, music21.note.Rest(quarterLength=0.25))
+                            ret.insert(i + offset + offset2 + 1, music21.note.Rest(quarterLength=0.25))
+                        while ret[(i + offset + offset2) % len(ret)].isRest and offset2 < 4:
+                            if (random.random() <= self.postfixProbability[offset2]):
+                                ret[(i + offset + offset2) % len(ret)] = music21.note.Note(pitch, quarterLength=ret[
+                                    (i + offset + offset2) % len(ret)].quarterLength)
+                            offset2 += 1
+                    # prefix
+                    if random.random() <= abs(cnt - 0.75) / 10.8:
                         offset2 = 0
-                        if(ret[(i-offset2+ len(ret)) % len(ret)].quarterLength != 0.25):
-                            ret[(i-offset2+ len(ret)) % len(ret)].quarterLength = 0.25
-                            ret.insert((i-offset2-1+ len(ret)) % len(ret), music21.note.Rest(quarterLength = 0.25))
-                            ret.insert((i-offset2-1+ len(ret)) % len(ret), music21.note.Rest(quarterLength = 0.25))
-                            ret.insert((i-offset2-1+ len(ret)) % len(ret), music21.note.Rest(quarterLength = 0.25))
-                        while ret[(i-offset2+ len(ret)) % len(ret)].isRest and offset2<4:
-                            if(random.random()<=self.prefixProbability[offset2]):
-                                ret[(i-offset2+ len(ret)) % len(ret)] = music21.note.Note(pitch, quarterLength = ret[(i-offset2+ len(ret)) % len(ret)].quarterLength)
-                            offset2+=1
+                        if (ret[(i - offset2 + len(ret)) % len(ret)].quarterLength != 0.25):
+                            ret[(i - offset2 + len(ret)) % len(ret)].quarterLength = 0.25
+                            ret.insert((i - offset2 - 1 + len(ret)) % len(ret), music21.note.Rest(quarterLength=0.25))
+                            ret.insert((i - offset2 - 1 + len(ret)) % len(ret), music21.note.Rest(quarterLength=0.25))
+                            ret.insert((i - offset2 - 1 + len(ret)) % len(ret), music21.note.Rest(quarterLength=0.25))
+                        while ret[(i - offset2 + len(ret)) % len(ret)].isRest and offset2 < 4:
+                            if (random.random() <= self.prefixProbability[offset2]):
+                                ret[(i - offset2 + len(ret)) % len(ret)] = music21.note.Note(pitch, quarterLength=ret[
+                                    (i - offset2 + len(ret)) % len(ret)].quarterLength)
+                            offset2 += 1
             cnt += ret[i].quarterLength
-        return ret            
+        return ret
+
     def generate_bass(self) -> list[music21.note.Note]:
         ret = []
         for i in range(16):
@@ -163,7 +168,7 @@ class Hiphop:
         part_hihat = utils.set_up_part(self.beat.get_bpm(), self.tone, music21.instrument.BassDrum())
         part_clap = utils.set_up_part(self.beat.get_bpm(), self.tone, music21.instrument.BassDrum())
         part_snare = utils.set_up_part(self.beat.get_bpm(), self.tone, music21.instrument.BassDrum())
-        
+
         for x in range(4):
             bt = self.beat.generate_beat(8)
             ch = self.chord.generate_chord_list(bt)
