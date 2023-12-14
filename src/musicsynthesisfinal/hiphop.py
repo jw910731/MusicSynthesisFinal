@@ -289,6 +289,12 @@ class Hiphop:
                                     [intro_chord_list, intro_melody_list, intro_bass, intro_hihat, intro_snare, intro_clap]):
             for r in b:
                 a.append(copy.deepcopy(r))
+        if self.beat.name != 'trap':
+            for _ in range(2):    
+                for a, b in zip([part_chord, part_melody, part_bass, part_hihat, part_snare, part_clap],
+                                        [chorus_chord_list, chorus_melody_list, chorus_bass, chorus_hihat, chorus_snare, chorus_clap]):
+                    for r in b:
+                        a.append(copy.deepcopy(r))
         for i in range(2):
             for a, b in zip([part_chord, part_melody, part_bass, part_hihat, part_snare, part_clap],
                                     [verse_chord_list, verse_melody_list, verse_bass, verse_hihat, verse_snare, verse_clap]):
