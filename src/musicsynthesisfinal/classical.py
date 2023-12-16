@@ -16,13 +16,17 @@ class ClassicalBeat(beat.Beat):
                 'Moderato': (90, 115),
                 'Andante': (66, 76)}
 
-    def __init__(self):
+    def __init__(self, style):
         """
         ClassicalBeat class representing a classical beat.
 
         This class inherits from the Beat class.
         """
-        self.speed_type, self.durationProbability = random.choice(list(self.PROBABILITY.items()))
+        if style == 'random':
+            self.speed_type, self.durationProbability = random.choice(list(self.PROBABILITY.items()))
+        else:
+            self.speed_type = style
+            self.durationProbability = self.PROBABILITY[style]
         self.bpm = random.randint(*self.BPMRANGE[self.speed_type])
 
     def __get_random_beat(self):
@@ -146,9 +150,9 @@ class ClassicalMelody(melody.CommonMelody):
 
 
 class Classical:
-    def __init__(self, tone):
+    def __init__(self, tone, style='random'):
         self.chord = ClassicalChord(tone)
-        self.beat = ClassicalBeat()
+        self.beat = ClassicalBeat(style=style)
         self.tone = tone
 
     def generate_music(self):
