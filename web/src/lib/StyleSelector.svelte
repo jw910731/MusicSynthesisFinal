@@ -23,15 +23,16 @@
             variant: ["Boombap", "Drill", "Trap"],
         }
     };
-    let selectedStyle = "";
-    let selectedVar = "";
-    
+    let selectedStyle = ""; // selected music style
+    let selectedVar = ""; // selected variant
+
+    // Clear selected variant when selected style change
     $: selectedStyle, selectedVar = "";
 
     export let style = "";
     $: style = (
-        !!styles[selectedStyle]
-        && (Array.isArray(styles[selectedStyle].variant)
+        (!!styles[selectedStyle]
+        && Array.isArray(styles[selectedStyle].variant)
         && styles[selectedStyle].variant.length <= 0)
         || selectedVar !== ""
     ) ? (selectedStyle + ((!!selectedVar) ? ("::" + selectedVar) : "")) : "";
