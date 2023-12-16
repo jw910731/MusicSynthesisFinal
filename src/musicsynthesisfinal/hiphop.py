@@ -11,8 +11,12 @@ import pop
 
 
 class HiphopBeat(beat.Beat):
-    def __init__(self):
-        self.name, self.hiphoptype = random.choice([ ('boombap',Boombap().boombap), ('drill', Drill().drill),('trap',Trap().trap)])  # , trap, boombap
+    def __init__(self, style):
+        if style == 'random':
+            self.name, self.hiphoptype = random.choice([ ('boombap',Boombap().boombap), ('drill', Drill().drill),('trap',Trap().trap)])  # , trap, boombap
+        else:
+            self.name = style
+            self.hiphoptype = {'boombap':Boombap().boombap, 'drill': Drill().drill,'trap':Trap().trap}[style]
         self.bass = random.choice(self.hiphoptype.Bass)
         self.hihat = random.choice(self.hiphoptype.Hihat)
         self.snare = random.choice(self.hiphoptype.Snare)
@@ -158,10 +162,10 @@ class HiphopMelody(pop.PopMelody):
         super().__init__(beat, chord, tone)
 
 class Hiphop:
-    def __init__(self, tone='F#'):
+    def __init__(self, tone='F#', style = 'random'):
         self.verse_chord = HiphopChord(tone)
         self.chorus_chord = HiphopChord(tone)
-        self.beat = HiphopBeat()
+        self.beat = HiphopBeat(style=style)
         self.tone = tone
 
     def generate_music(self):
