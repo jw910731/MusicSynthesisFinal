@@ -8,7 +8,7 @@
     const styles: Record<string, Style> = {
         "classical": {
             display: "Classical",
-            variant: [["allegro", "Allegro"], ["moderato", "Moderato"], ["andante", "Andante"]],
+            variant: [["Allegro", "Allegro"], ["Moderato", "Moderato"], ["Andante", "Andante"]],
         },
         "pop": {
             display: "Pop",
