@@ -1,6 +1,7 @@
 <script>
-    import ToneSelector from "./ToneSelector.svelte";
-    import StyleSelector from "./StyleSelector.svelte";
+    import ToneSelector from "$lib/ToneSelector.svelte";
+    import StyleSelector from "$lib/StyleSelector.svelte";
+    import {ProgressRadial} from "@skeletonlabs/skeleton";
 
     let tone = "";
     let style = "";
