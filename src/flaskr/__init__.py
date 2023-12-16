@@ -1,6 +1,9 @@
 import os
+import sys
 
 from flask import Flask
+
+sys.path.insert(0, 'src/musicsynthesisfinal')
 
 
 def create_app(test_config=None):
