@@ -29,7 +29,7 @@
     import {onMount} from "svelte";
     import {ProgressBar} from "@skeletonlabs/skeleton";
 
-    export let file: File;
+    export let file: Blob;
 
     let wrapper: HTMLElement;
     let scrollElement: HTMLElement;
