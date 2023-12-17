@@ -76,9 +76,6 @@
                 <Fa class="mr-2" icon="{faDownload}"/>
                 Download music sheet
             </a>
-            <a type="button" class="btn variant-filled-surface text-surface-50 mx-2" href="https://oov.github.io/mxl2mid/" target=”_blank”>
-                Convert XML to Midi
-            </a>
             {#key scoreFile}
                 <MusicSheet file={scoreFile}/>
             {/key}
