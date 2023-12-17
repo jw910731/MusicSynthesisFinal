@@ -159,8 +159,9 @@ class Classical:
         part_chord = utils.set_up_part(self.beat.get_bpm(), self.tone)
         part_melody = utils.set_up_part(self.beat.get_bpm(), self.tone)
         ret = []
-        for i in range(16):
-            bt = self.beat.generate_beat(6)
+        beatperrange = random.choice([6,8])
+        for i in range(64):
+            bt = self.beat.generate_beat(beatperrange)
             ch = self.chord.generate_chord_list(bt)
             mel = ClassicalMelody(bt, ch, self.tone)
             for c in ch:
