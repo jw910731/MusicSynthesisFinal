@@ -2,6 +2,7 @@ import io
 import json
 import array
 import traceback
+import zipfile
 
 import music21
 from musicsynthesisfinal import classical, pop, folk, hiphop
@@ -51,8 +52,15 @@ def generate():
         resp = make_response(json.dumps(error), 400)
         return resp
     music_xml = music21.converter.toData(stream, 'musicxml')
-    byte_io = io.BytesIO(music_xml.encode())
-    return send_file(byte_io, download_name="music.xml")
+    midi = music21.converter.toData(stream, 'midi')
+    zip_buf = io.BytesIO()
+    zip_file = zipfile.ZipFile(zip_buf, "w",
+                         zipfile.ZIP_DEFLATED, False)
+    zip_file.writestr("music.xml", music_xml)
+    zip_file.writestr("music.midi", midi)
+    zip_file.close()
+    send_buf = io.BytesIO(zip_buf.getvalue())
+    return send_file(send_buf, download_name="music.zip")
 
 
 @bp.route("/")

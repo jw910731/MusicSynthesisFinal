@@ -5,11 +5,13 @@
     import MusicSheet from "$lib/MusicSheet.svelte";
     import Fa from "svelte-fa";
     import {faDownload} from "@fortawesome/free-solid-svg-icons";
+    import JSZip from "jszip";
 
     const toastStore = getToastStore();
     let scoreFile: Blob | null = null;
+    let midiFile: Blob | null = null
 
-    $: fileLink = ((!!scoreFile) ? (URL.createObjectURL(scoreFile)) : "");
+    $: fileLink = ((!!midiFile) ? (URL.createObjectURL(midiFile)) : "");
 
     async function generateMusic(tone: string, style: string) {
         const req_data = {tone, style}
@@ -18,7 +20,28 @@
             body: JSON.stringify(req_data)
         })
         if (raw_resp.status == 200) {
-            scoreFile = await raw_resp.blob();
+            const zipFile = await raw_resp.blob();
+            const zipObj = await JSZip.loadAsync(zipFile);
+            const score = await zipObj.file("music.xml")?.async('uint8array');
+            if(!score) {
+                const toast: ToastSettings = {
+                    message: "Server response error (decompress xml error)",
+                    background: "variant-filled-error",
+                };
+                toastStore.trigger(toast);
+                return;
+            }
+            scoreFile = new Blob([score]);
+            const midi = await zipObj.file("music.midi")?.async('uint8array');
+            if(!midi) {
+                const toast: ToastSettings = {
+                    message: "Server response error (decompress xml error)",
+                    background: "variant-filled-error",
+                };
+                toastStore.trigger(toast);
+                return;
+            }
+            midiFile = new Blob([midi]);
         } else {
             let msg: string;
             if (raw_resp.status == 400) {
@@ -48,10 +71,13 @@
     </div>
     {#if !!scoreFile}
         <div class="my-2">
-            <a type="button" class="btn variant-filled-success text-surface-50 mt-2 mb-4" href={fileLink}
-               download="music.xml">
+            <a type="button" class="btn variant-filled-success text-surface-50 mx-2 mt-2 mb-4" href={fileLink}
+               download="music.midi">
                 <Fa class="mr-2" icon="{faDownload}"/>
                 Download music sheet
+            </a>
+            <a type="button" class="btn variant-filled-surface text-surface-50 mx-2" href="https://oov.github.io/mxl2mid/" target=”_blank”>
+                Convert XML to Midi
             </a>
             {#key scoreFile}
                 <MusicSheet file={scoreFile}/>
