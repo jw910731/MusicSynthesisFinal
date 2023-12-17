@@ -20,13 +20,11 @@
     <div>
         <p class="my-2">Tone Selection: </p>
         <ToneSelector bind:tone/>
-        <p>Tone: {tone}</p>
     </div>
     <div>
         <p class="my-2">Style: </p>
         <StyleSelector bind:style/>
-        <p>Style: {style}</p>
-        <button type="button" class="btn variant-filled-primary" on:click={cbHandler} disabled={disableSubmit}>
+        <button type="button" class="btn variant-filled-primary text-surface-50 my-2" on:click={cbHandler} disabled={disableSubmit}>
             {#if disableSubmit}
                 <ProgressRadial width="w-4"/>
             {:else}
