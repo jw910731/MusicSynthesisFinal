@@ -3,22 +3,21 @@ Music synthesis course final project
 
 # Setup
 ## Setup Python Guide
-This project uses rye to manage python envirnoment and package dependency. More about how to install and use rye, see the following link: [https://rye-up.com/](https://rye-up.com/).
+This project uses poetry to manage python envirnoment and package dependency. More about how to install and use rye, see the following link: [https://rye-up.com/](https://rye-up.com/).
 
 To get started, run the following command:
 ```bash
-rye sync
-source .venv/bin/activate
+poetry install
 ```
 
 Add package as dependency by:
 ```bash
-rye add <package>
+poetry install <package>
 ```
 
-Sync the dependency after installing new dependency:
+Don't use `python` command to use python ,instead run python with:
 ```bash
-rye sync
+poetry run python
 ```
 ## Setup Web
 This project include frontend code which need to install dependency by using pnpm

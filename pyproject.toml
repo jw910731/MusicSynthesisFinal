@@ -1,27 +1,16 @@
-[project]
+[tool.poetry]
 name = "musicsynthesisfinal"
 version = "0.1.0"
-description = "Add your description here"
-authors = [{ name = "jw910731", email = "jw910731@gmail.com" }]
-dependencies = [
-    "music21>=8.3.0",
-    "flask>=3.0.0",
-]
+description = ""
+authors = ["Your Name <you@example.com>"]
 readme = "README.md"
-requires-python = ">= 3.8"
+
+[tool.poetry.dependencies]
+python = "3.11.*"
+Flask = "^3.0.0"
+music21 = "^9.1.0"
+
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.rye]
-managed = true
-dev-dependencies = []
-
-[[tool.rye.sources]]
-name = "pytorch-preview"
-url = "https://download.pytorch.org/whl/nightly/cpu"
-type = "index"
-
-[tool.hatch.metadata]
-allow-direct-references = true
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
