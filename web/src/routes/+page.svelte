@@ -48,11 +48,14 @@
     </div>
     {#if !!scoreFile}
         <div class="my-2">
-            <a type="button" class="btn variant-filled-success text-surface-50 mt-2 mb-4" href={fileLink} download="music.xml">
+            <a type="button" class="btn variant-filled-success text-surface-50 mt-2 mb-4" href={fileLink}
+               download="music.xml">
                 <Fa class="mr-2" icon="{faDownload}"/>
                 Download music sheet
             </a>
-            <MusicSheet file={scoreFile}/>
+            {#key scoreFile}
+                <MusicSheet file={scoreFile}/>
+            {/key}
         </div>
     {/if}
 </div>

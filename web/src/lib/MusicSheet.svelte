@@ -26,7 +26,7 @@
     import type {AlphaTabApi} from "$lib/alphaTab";
     import Fa from 'svelte-fa'
     import {faPause, faPlay, faStepBackward} from "@fortawesome/free-solid-svg-icons";
-    import {onMount} from "svelte";
+    import {onDestroy, onMount} from "svelte";
     import {ProgressBar} from "@skeletonlabs/skeleton";
 
     export let file: Blob;
@@ -118,6 +118,9 @@
     }
 
     onMount(createAlphaTab);
+    onDestroy(() => {
+        api.destroy();
+    })
 </script>
 
 <div class="dark:bg-white">
@@ -129,11 +132,11 @@
         </div>
         <div class="flex-grow-0 flex-shrink-0 flex justify-between bg-blue-500">
             <div class="flex justify-start content-center items-center">
-                <a class="decoration-0 text-surface-50 dark:text-surface-900 border-r-0 h-10 w-10 text-base flex text-center items-center justify-center cursor-pointer p-1 my-0.5 mx-0"
+                <a role="button" class="decoration-0 text-surface-50 dark:text-surface-900 border-r-0 h-10 w-10 text-base flex text-center items-center justify-center cursor-pointer p-1 my-0.5 mx-0"
                    class:disabled={!playerReady}>
                     <Fa icon={faStepBackward}/>
                 </a>
-                <a class="decoration-0 text-surface-50 dark:text-surface-900 border-r-0 h-10 w-10 text-base flex text-center items-center justify-center cursor-pointer p-1 my-0.5 mx-0"
+                <a role="button" class="decoration-0 text-surface-50 dark:text-surface-900 border-r-0 h-10 w-10 text-base flex text-center items-center justify-center cursor-pointer p-1 my-0.5 mx-0"
                    class:disabled={!playerReady} on:click={()=> api.playPause()}>
                     {#if playing}
                         <Fa icon={faPause}/>
