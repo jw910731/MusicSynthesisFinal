@@ -232,7 +232,7 @@
     onMount(createAlphaTab);
 </script>
 
-<div class="bg-white">
+<div class="dark:bg-white">
     <div class="border-black border-2 h-screen flex relative flex-col overflow-hidden" bind:this={wrapper}>
         <div class="relative overflow-hidden flex-auto">
             <div class="overflow-y-auto absolute top-0 left-20 right-0 bottom-0 p-5" bind:this={scrollElement}>
@@ -241,11 +241,11 @@
         </div>
         <div class="flex-grow-0 flex-shrink-0 flex justify-between bg-blue-500">
             <div class="flex justify-start content-center items-center">
-                <a class="decoration-0 text-white border-r-0 h-10 w-10 text-base flex text-center items-center justify-center cursor-pointer p-1 my-0.5 mx-0"
+                <a class="decoration-0 text-surface-50 dark:text-surface-900 border-r-0 h-10 w-10 text-base flex text-center items-center justify-center cursor-pointer p-1 my-0.5 mx-0"
                    class:disabled={!playerReady}>
                     <Fa icon={faStepBackward}/>
                 </a>
-                <a class="decoration-0 text-white border-r-0 h-10 w-10 text-base flex text-center items-center justify-center cursor-pointer p-1 my-0.5 mx-0"
+                <a class="decoration-0 text-surface-50 dark:text-surface-900 border-r-0 h-10 w-10 text-base flex text-center items-center justify-center cursor-pointer p-1 my-0.5 mx-0"
                    class:disabled={!playerReady} on:click={()=> api.playPause()}>
                     {#if playing}
                         <Fa icon={faPause}/>
@@ -256,15 +256,15 @@
             </div>
             <div class="flex-auto flex items-center justify-center">
                 {#if playerReady}
-                    <ProgressBar value={percentage} max={100} />
+                    <ProgressBar value={percentage} max={100}/>
                 {/if}
             </div>
             <div class="flex justify-start content-center items-center">
-                <div class="at-song-info flex text-center items-center justify-center cursor-pointer p-1 my-0.5 mx-0">
+                <div class="at-song-info flex text-center items-center justify-center cursor-pointer p-1 my-0.5 mx-0 text-surface-50 dark:text-surface-900">
                     <span class="font-bold">{title}</span> -
                     <span>{artist}</span>
                 </div>
-                <div class="at-song-position flex text-center items-center justify-center cursor-pointer p-1 my-0.5 mx-0">{playTime.map(formatDuration).join("/")}</div>
+                <div class="text-surface-50 dark:text-surface-900 flex text-center items-center justify-center cursor-pointer p-1 my-0.5 mx-0">{playTime.map(formatDuration).join("/")}</div>
             </div>
         </div>
     </div>
