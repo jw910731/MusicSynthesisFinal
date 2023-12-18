@@ -1,5 +1,6 @@
 <script lang="ts">
     import {ListBox, ListBoxItem} from "@skeletonlabs/skeleton";
+    import {choose} from "$lib/ToneSelector";
 
     type Style = {
         display: string,
@@ -28,12 +29,15 @@
 
     // Clear selected variant when selected style change
     $: selectedStyle, selectedVar = "";
+    $: if(selectedVar === "random") {
+        selectedVar = choose(styles[selectedStyle].variant)[0]
+    }
 
     export let style = "";
     $: style = (
         (!!styles[selectedStyle]
-        && Array.isArray(styles[selectedStyle].variant)
-        && styles[selectedStyle].variant.length <= 0)
+            && Array.isArray(styles[selectedStyle].variant)
+            && styles[selectedStyle].variant.length <= 0)
         || selectedVar !== ""
     ) ? (selectedStyle + ((!!selectedVar) ? ("::" + selectedVar) : "")) : "";
 
@@ -48,14 +52,15 @@
                 {/each}
             </ListBox>
         </div>
-        <div class="select">
-            {#if !!styles[selectedStyle] && Array.isArray(styles[selectedStyle].variant) && styles[selectedStyle].variant.length}
+        {#if !!styles[selectedStyle] && Array.isArray(styles[selectedStyle].variant) && styles[selectedStyle].variant.length}
+            <div class="select">
                 <ListBox>
+                    <ListBoxItem bind:group={selectedVar} name="style" value="random">Random</ListBoxItem>
                     {#each styles[selectedStyle].variant as [val, variant]}
                         <ListBoxItem bind:group={selectedVar} name="style" value={val}>{variant}</ListBoxItem>
                     {/each}
                 </ListBox>
-            {/if}
-        </div>
+            </div>
+        {/if}
     </div>
 </div>
