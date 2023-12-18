@@ -58,10 +58,11 @@ class CommonMelody(Melody):
 
     def generate_melody(self) -> list[music21.note.Note]:
         part_melody = []
-        pitch = -1
-        while pitch == -1 or pitch % 12 not in [utils.NOTE_NUMBER_CONV[x] - 12 for x in utils.NATURAL_SCALE[self.tone]]:
-            pitch = random.randint(53, 77)
-        last_note = music21.note.Note(midi=pitch, quarterLength=4)
+        scale_obj = music21.scale.MajorScale(str.lower(self.tone)) if str.isupper(
+            self.tone) else music21.scale.MinorScale(self.tone)
+        scale = scale_obj.getPitches('f3', 'f5')
+        pitch = random.choice(scale)
+        last_note = music21.note.Note(pitch=pitch, quarterLength=4)
         offset = 0
         now_chord = 0
         chord_duration = self._chord[0].quarterLength
