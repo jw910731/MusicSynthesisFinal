@@ -11,13 +11,13 @@ RUN pnpm run build
 FROM python:3.11.7-slim
 RUN pip install poetry
 RUN mkdir -p /app/web/build
+WORKDIR /app
 
 COPY ./pyproject.toml ./poetry.lock ./README.md /app/
 COPY ./src /app/src/
-COPY --from=WEB /app/build /app/web/build
-WORKDIR /app
-
 RUN poetry install
+
+COPY --from=WEB /app/build /app/web/build
 
 EXPOSE 8000
 ENV FLASK_APP = src/flaskr/__init__.py
