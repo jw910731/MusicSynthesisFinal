@@ -1,7 +1,6 @@
 import music21
 
-import pop
-import utils
+from musicsynthesisfinal import pop, utils
 
 
 class Folk(pop.Pop):

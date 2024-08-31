@@ -65,12 +65,14 @@ def generate():
 
 @bp.route("/")
 def index():
-    return send_from_directory('../../web/build', "index.html")
+    import os
+    return send_from_directory(os.environ["BASE_DIR"], "index.html")
 
 
 @bp.route("/<path:path>")
 def base(path):
-    return send_from_directory('../../web/build', path)
+    import os
+    return send_from_directory(os.environ["BASE_DIR"], path)
 
 
 def get_stream(style):

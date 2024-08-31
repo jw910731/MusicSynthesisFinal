@@ -1,13 +1,9 @@
 import copy
-import chord, utils
-from hiphoptemplate import *
+from musicsynthesisfinal import chord, utils, beat, melody, pop
+from musicsynthesisfinal.hiphoptemplate import *
 import random
 
 import music21
-
-import beat
-import melody
-import pop
 
 
 class HiphopBeat(beat.Beat):

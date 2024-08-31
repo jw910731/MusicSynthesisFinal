@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import music21
 import typing
-import utils
+from musicsynthesisfinal import utils 
 import random
 
 

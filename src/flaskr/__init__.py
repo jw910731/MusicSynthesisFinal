@@ -16,7 +16,7 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    from . import example
+    from flaskr import example
     app.register_blueprint(example.bp)
 
     return app

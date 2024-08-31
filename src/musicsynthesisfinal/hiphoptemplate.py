@@ -1,4 +1,7 @@
-import utils, random
+import random
+
+from musicsynthesisfinal import utils
+
 class InstrumentAttribute():
     def __init__(self, pitch:int):
         self.Template = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]

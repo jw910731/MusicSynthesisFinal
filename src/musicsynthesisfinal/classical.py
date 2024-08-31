@@ -2,10 +2,7 @@ import random
 
 import music21
 
-import beat
-import chord
-import utils
-import melody
+from musicsynthesisfinal import beat, chord, utils, melody
 
 
 class ClassicalBeat(beat.Beat):

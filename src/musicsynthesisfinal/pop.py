@@ -4,10 +4,7 @@ import copy
 
 import music21
 
-import beat
-import chord
-import melody
-import utils
+from musicsynthesisfinal import beat, chord, melody, utils
 
 
 class PopBeat(beat.Beat):
