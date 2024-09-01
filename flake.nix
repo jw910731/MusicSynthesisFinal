@@ -67,7 +67,7 @@
         pkgs = import nixpkgs { inherit system; };
         pnpm2nix' = pnpm2nix.packages.${system};
         lib = pkgs.lib;
-        mkLinuxPkgs = arch: import nixpkgs-upstream { inherit system; crossSystem.config = "${arch}-unknown-linux-musl"; overlays = [targetOverlays poetry2nix.overlays.default]; };
+        mkLinuxPkgs = arch: if system == "${arch}-linux" then pkgs else import nixpkgs-upstream { inherit system; crossSystem.config = "${arch}-unknown-linux-musl"; overlays = [targetOverlays poetry2nix.overlays.default]; };
         archName = {
           "x86_64" = "amd64";
           "aarch64" = "arm64";
