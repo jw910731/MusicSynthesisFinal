@@ -37,11 +37,12 @@
           nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ prev.deterministic-host-uname ];
         });
         openblas = prev.openblas.overrideAttrs (old: {
-          makeFlags = (old.makeFlags or []) ++ ((prev.lib.mapAttrsToList (var: val: "${var}=${(val: if !builtins.isBool val then toString val else if val then "1" else "0") val}")) ((prev.lib.optionalAttrs (prev.stdenv.hostPlatform.isx86_64) {
-            CFLAGS = "-msse3";
-          }) // {
+          makeFlags = (old.makeFlags or []) ++ ((prev.lib.mapAttrsToList (var: val: "${var}=${(val: if !builtins.isBool val then toString val else if val then "1" else "0") val}")) {
             LDFLAGS = "-Wl,-rpath-link,${prev.lib.getLib prev.buildPackages.gfortran.cc}/lib";
-          }));
+          });
+          preBuild = (old.preBuild or "") + prev.lib.optionalString (prev.stdenv.hostPlatform.isx86_64) ''
+            makeFlagsArray+=(CFLAGS="-msse3 -march=x86-64-v3")
+          '';
           nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ prev.deterministic-host-uname ];
         });
         boost = let arch = {
@@ -136,7 +137,7 @@
             }).overridePythonAttrs (old: let 
                 parsed = super.stdenv.targetPlatform.parsed;
               in {
-              preBuild = (''
+              preBuild = (lib.optionalString (lib.hasSuffix ".tar.gz" old.src) ''
                 sed -ie 's!sys.platform!"${parsed.kernel.name}"!g ; s!import numpy as np!!g ; s!np.get_include()!"${super.numpy}/lib/python${python.pythonVersion}/site-packages/numpy/core/include"!g' setupext.py
               '' + (old.preBuild or ""));
               env = (old.env or {}) // {
